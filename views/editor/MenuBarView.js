@@ -26,6 +26,7 @@ exports = Class(TopBar, function (supr) {
 				{title: 'Node', method: 'onNode', style: 'GREEN'},
 				{title: 'Tile', method: 'onTile', style: 'GREEN'},
 				{title: 'Tags', method: 'onTags', style: 'GREEN'},
+				{title: 'Text', method: 'onText', style: 'GREEN'},
 				{title: 'Zoom', method: 'onZoom', style: 'GREEN'},
 				{title: 'Clear', method: 'onClear', style: 'RED'},
 				{title: 'Export', method: 'onExport', style: 'BLUE'}
@@ -96,7 +97,11 @@ exports = Class(TopBar, function (supr) {
 	};
 
 	this.onTags = function () {
-		this.emit('Tags', this._tileX, this._tileY);
+		this.emit('Tags');
+	};
+
+	this.onText = function () {
+		this.emit('Text');
 	};
 
 	this.onZoom = function () {

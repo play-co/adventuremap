@@ -12,7 +12,8 @@ exports = Class(ImageView, function (supr) {
 
 		supr(this, 'init', [opts]);
 
-		this._tileSize = opts.tileSize;
+		this._tileWidth = opts.tileWidth;
+		this._tileHeight = opts.tileHeight;
 
 		this._itemRightView = null;
 		this._itemBottomView = null;
@@ -52,12 +53,11 @@ exports = Class(ImageView, function (supr) {
 
 		var style = view.style;
 		var center = path.height * 0.5;
-		var tileSize = this._tileSize;
 		var vec = this._vec;
-		var a1 = node1.x * tileSize;
-		var b1 = node1.y * tileSize;
-		var a2 = (x2 - x1 + node2.x) * tileSize;
-		var b2 = (y2 - y1 + node2.y) * tileSize;
+		var a1 = node1.x * this._tileWidth;
+		var b1 = node1.y * this._tileHeight;
+		var a2 = (x2 - x1 + node2.x) * this._tileWidth;
+		var b2 = (y2 - y1 + node2.y) * this._tileHeight;
 
 		vec.x = a2 - a1;
 		vec.y = b2 - b1;
@@ -154,7 +154,11 @@ exports = Class(ImageView, function (supr) {
 		this.style.visible = tile.right || tile.bottom;
 	};
 
-	this.setTileSize = function (tileSize) {
-		this._tileSize = tileSize;
+	this.setTileWidth = function (tileWidth) {
+		this._tileWidth = tileWidth;
+	};
+
+	this.setTileHeight = function (tileHeight) {
+		this._tileHeight = tileHeight;
 	};
 });

@@ -24,8 +24,8 @@ exports = Class(View, function (supr) {
 		this._tileX = tileX;
 		this._tileY = tileY;
 
-		this.style.x = (tileX - adventureMapModel.getTileX()) * adventureMapModel.getTileSize();
-		this.style.y = (tileY - adventureMapModel.getTileY()) * adventureMapModel.getTileSize();
+		this.style.x = (tileX - adventureMapModel.getTileX()) * adventureMapModel.getTileWidth();
+		this.style.y = (tileY - adventureMapModel.getTileY()) * adventureMapModel.getTileHeight();
 		this.style.visible = true;
 	};
 

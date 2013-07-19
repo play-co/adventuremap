@@ -14,7 +14,8 @@ exports = Class(Emitter, function (supr) {
 		var data = {
 				width: opts.width,
 				height: opts.height,
-				tileSize: opts.tileSize,
+				tileWidth: opts.tileWidth,
+				tileHeight: opts.tileHeight,
 				tileX: 0,
 				tileY: 0
 			};
@@ -103,8 +104,12 @@ exports = Class(Emitter, function (supr) {
 		return this._map;
 	};
 
-	this.getTileSize = function () {
-		return this._data.tileSize;
+	this.getTileWidth = function () {
+		return this._data.tileWidth;
+	};
+
+	this.getTileHeight = function () {
+		return this._data.tileHeight;
 	};
 
 	this.getTileX = function () {
@@ -141,7 +146,7 @@ exports = Class(Emitter, function (supr) {
 			this._data.tileX--;
 			this._needsPopulate = true;
 		} else {
-			scrollData.x = this._data.tileSize;
+			scrollData.x = this._data.tileWidth;
 			scrollData.maxX = true;
 		}
 	};
@@ -163,7 +168,7 @@ exports = Class(Emitter, function (supr) {
 			this._data.tileY--;
 			this._needsPopulate = true;
 		} else {
-			scrollData.y = this._data.tileSize;
+			scrollData.y = this._data.tileHeight;
 			scrollData.maxY = true;
 		}
 	};
@@ -184,7 +189,8 @@ exports = Class(Emitter, function (supr) {
 		var data = this._data;
 		var grid = data.grid;
 		var result = {
-				tileSize: this._data.tileSize,
+				tileWidth: this._data.tileWidth,
+				tileHeight: this._data.tileHeight,
 				width: data.width,
 				height: data.height,
 				grid: []
@@ -263,7 +269,8 @@ exports = Class(Emitter, function (supr) {
 
 		this._data.width = width;
 		this._data.height = height;
-		this._data.tileSize = data.tileSize;
+		this._data.tileWidth = data.tileWidth;
+		this._data.tileHeight = data.tileHeight;
 
 		this._nodesByTag = {};
 

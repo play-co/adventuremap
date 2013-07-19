@@ -8,12 +8,14 @@ exports = Class(GestureView, function (supr) {
 	this.init = function (opts) {
 		supr(this, 'init', [opts]);
 
-		var tileSize = opts.tileSize;
+		var tileWidth = opts.tileWidth;
+		var tileHeight = opts.tileHeight;
 
-		this.style.x = -tileSize;
-		this.style.y = -tileSize;
+		this.style.x = -tileWidth;
+		this.style.y = -tileHeight;
 
-		this._tileSize = tileSize;
+		this._tileWidth = tileWidth;
+		this._tileHeight = tileHeight;
 		this._tiles = opts.tiles ? this._loadTiles(opts.tiles) : [];
 		this._map = opts.map;
 		this._scrollData = opts.scrollData;
@@ -23,9 +25,10 @@ exports = Class(GestureView, function (supr) {
 			ctor: opts.tileCtor,
 			initOpts: {
 				superview: this,
-				tileSize: opts.tileSize,
-				width: opts.tileSize,
-				height: opts.tileSize,
+				tileWidth: opts.tileWidth,
+				tileHeight: opts.tileHeight,
+				width: opts.tileWidth,
+				height: opts.tileHeight,
 				tiles: opts.tiles,
 				map: opts.map,
 				nodes: opts.nodes,
@@ -43,12 +46,12 @@ exports = Class(GestureView, function (supr) {
 
 	this.calcSizeX = function (scale) {
 		var width = this._superview.getSuperview().style.width; // AdventureMapView
-		return Math.ceil(width / (this._tileSize * scale)) + 2;
+		return Math.ceil(width / (this._tileWidth * scale)) + 2;
 	};
 
 	this.calcSizeY = function (scale) {
 		var height = this._superview.getSuperview().style.height; // AdventureMapView
-		return Math.ceil(height / (this._tileSize * scale)) + 2;
+		return Math.ceil(height / (this._tileHeight * scale)) + 2;
 	};
 
 	this._updateSize = function () {
@@ -79,7 +82,8 @@ exports = Class(GestureView, function (supr) {
 
 	this.populateView = function (data) {
 		var grid = data.grid;
-		var tileSize = this._tileSize;
+		var tileWidth = this._tileWidth;
+		var tileHeight = this._tileHeight;
 		var sizeX = this._sizeX;
 		var sizeY = this._sizeY;
 		var viewPool = this._viewPool;
@@ -97,10 +101,10 @@ exports = Class(GestureView, function (supr) {
 					length++;
 				}
 				view.style.zIndex = sizeX * sizeY - index;
-				view.style.x = x * tileSize;
-				view.style.y = y * tileSize;
-				view.style.width = tileSize;
-				view.style.height = tileSize;
+				view.style.x = x * tileWidth;
+				view.style.y = y * tileHeight;
+				view.style.width = tileWidth;
+				view.style.height = tileHeight;
 				view.update(grid, data.tileX + x, data.tileY + y);
 				index++;
 			}
@@ -109,8 +113,8 @@ exports = Class(GestureView, function (supr) {
 			view = views[index++].style.visible = false;
 		}
 
-		this.style.width = sizeX * tileSize;
-		this.style.height = sizeY * tileSize;
+		this.style.width = sizeX * tileWidth;
+		this.style.height = sizeY * tileHeight;
 
 		this._gridWidth = data.width;
 		this._gridHeight = data.height;
@@ -140,17 +144,31 @@ exports = Class(GestureView, function (supr) {
 		return this._sizeY;
 	};
 
-	this.setTileSize = function (tileSize) {
+	this.setTileWidth = function (tileWidth) {
 		var viewPool = this._viewPool;
 		var views = viewPool.getViews();
 		var length = viewPool.getLength();
 
 		while (length) {
 			var view = views[--length];
-			view.setTileSize && view.setTileSize(tileSize);
+			view.setTileWidth && view.setTileWidth(tileWidth);
 		}
 
 		this._scale = null; // Forces the dimensions to be recalculated...	
-		this._tileSize = tileSize;
+		this._tileWidth = tileWidth;
+	};
+
+	this.setTileHeight = function (tileHeight) {
+		var viewPool = this._viewPool;
+		var views = viewPool.getViews();
+		var length = viewPool.getLength();
+
+		while (length) {
+			var view = views[--length];
+			view.setTileHeight && view.setTileWidth(tileHeight);
+		}
+
+		this._scale = null; // Forces the dimensions to be recalculated...	
+		this._tileHeight = tileHeight;
 	};
 });

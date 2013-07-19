@@ -3,6 +3,7 @@ import event.Emitter as Emitter;
 import .tools.ImageListView as ImageListView;
 import .tools.TagListView as TagListView;
 import .tools.ZoomView as ZoomView;
+import .tools.TextEditView as TextEditView;
 
 import .CursorView;
 import .MenuBarView;
@@ -21,8 +22,8 @@ exports = Class(Emitter, function () {
 			superview: this._adventureMap.getAdventureMapLayers()[0],
 			x: 0,
 			y: 0,
-			width: this._adventureMapModel.getTileSize(),
-			height: this._adventureMapModel.getTileSize(),
+			width: this._adventureMapModel.getTileWidth(),
+			height: this._adventureMapModel.getTileHeight(),
 			adventureMap: this._adventureMap,
 			zIndex: 999999999
 		});
@@ -45,6 +46,7 @@ exports = Class(Emitter, function () {
 		this._menuBarView.on('Right', bind(this, 'onRightEdit'));
 		this._menuBarView.on('Bottom', bind(this, 'onBottomEdit'));
 		this._menuBarView.on('Tags', bind(this, 'onTagsEdit'));
+		this._menuBarView.on('Text', bind(this, 'onTextEdit'));
 		this._menuBarView.on('Zoom', bind(this, 'onZoom'));
 		this._menuBarView.on('Clear', bind(this, 'onClear'));
 		this._menuBarView.on('Export', bind(this, 'onExport'));
@@ -118,6 +120,21 @@ exports = Class(Emitter, function () {
 			canCancel: true,
 			padding: 10,
 			title: 'Tags',
+			adventureMapModel: this._adventureMapModel
+		}));
+
+		// Text edit
+		this._lists.push(new TextEditView({
+			superview: opts.superview,
+			x: 0,
+			y: opts.height - 96,
+			width: opts.width,
+			height: 96,
+			tags: opts.tags,
+			visible: false,
+			canCancel: true,
+			padding: 10,
+			title: 'Texts',
 			adventureMapModel: this._adventureMapModel
 		}));
 
@@ -266,12 +283,16 @@ exports = Class(Emitter, function () {
 		}
 	};
 
-	this.onTagsEdit = function (tileX, tileY) {
-		this.showList(4, tileX, tileY);
+	this.onTagsEdit = function () {
+		this.showList(4, this._tileX, this._tileY);
+	};
+
+	this.onTextEdit = function () {
+		this.showList(5);
 	};
 
 	this.onZoom = function () {
-		this.showList(5);
+		this.showList(6);
 	};
 
 	this.onZoomIn = function () {

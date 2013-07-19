@@ -9,7 +9,8 @@ exports = Class(Emitter, function (supr) {
 		supr(this, 'init', [opts]);
 
 		this._model = new AdventureMapModel({
-			tileSize: opts.gridSettings.tileSize,
+			tileWidth: opts.gridSettings.tileWidth,
+			tileHeight: opts.gridSettings.tileHeight,
 			width: opts.gridSettings.width,
 			height: opts.gridSettings.height,
 			defaultTile: opts.gridSettings.defaultTile
@@ -21,7 +22,8 @@ exports = Class(Emitter, function (supr) {
 			scale: 1
 		};
 
-		opts.tileSize = opts.gridSettings.tileSize;
+		opts.tileWidth = opts.gridSettings.tileWidth;
+		opts.tileHeight = opts.gridSettings.tileHeight;
 		opts.map = this._model.getMap();
 		opts.scrollData = this._scrollData;
 		this._adventureMapView = new AdventureMapView(opts);
@@ -67,7 +69,8 @@ exports = Class(Emitter, function (supr) {
 		this._model.load(data);
 
 		var modelData = this._model.getData();
-		this._adventureMapView.setTileSize(modelData.tileSize);
+		this._adventureMapView.setTileWidth(modelData.tileWidth);
+		this._adventureMapView.setTileHeight(modelData.tileHeight);
 		this._adventureMapView.onUpdate(modelData);
 	};
 

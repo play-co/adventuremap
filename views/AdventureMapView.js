@@ -13,7 +13,8 @@ exports = Class(View, function (supr) {
 
 		this.style.clip = true;
 
-		this._tileSize = opts.tileSize;
+		this._tileWidth = opts.tileWidth;
+		this._tileHeight = opts.tileHeight;
 		this._scrollData = opts.scrollData;
 		this._adventureMapLayers = [];
 
@@ -35,7 +36,8 @@ exports = Class(View, function (supr) {
 				y: opts.y,
 				width: opts.width,
 				height: opts.height,
-				tileSize: opts.tileSize,
+				tileWidth: opts.tileWidth,
+				tileHeight: opts.tileHeight,
 				tileCtor: ctors[i],
 				scrollData: opts.scrollData,
 				map: opts.map,
@@ -47,8 +49,8 @@ exports = Class(View, function (supr) {
 			}));
 		}
 
-		this._content.style.width = this._adventureMapLayers[0].calcSizeX(0.5) * opts.tileSize;
-		this._content.style.height = this._adventureMapLayers[0].calcSizeY(0.5) * opts.tileSize;
+		this._content.style.width = this._adventureMapLayers[0].calcSizeX(0.5) * opts.tileWidth;
+		this._content.style.height = this._adventureMapLayers[0].calcSizeY(0.5) * opts.tileHeight;
 
 		this._gestureView = this._adventureMapLayers[0];
 		this._gestureView.on('DragSingle', bind(this, 'onDragSingle'));
@@ -67,9 +69,8 @@ exports = Class(View, function (supr) {
 
 		var content = this._content;
 		var scale = content.style.scale;
-		var tileSize = this._tileSize;
-		content.style.width = tileSize * adventureMapLayer.getSizeX();
-		content.style.height = tileSize * adventureMapLayer.getSizeY();
+		content.style.width = this._tileWidth * adventureMapLayer.getSizeX();
+		content.style.height = this._tileHeight * adventureMapLayer.getSizeY();
 		content.style.x = (this.style.width - content.style.width * scale) * 0.5;
 		content.style.y = (this.style.height - content.style.height * scale) * 0.5;
 	};
@@ -81,20 +82,19 @@ exports = Class(View, function (supr) {
 
 	this.scroll = function (deltaX, deltaY) {
 		var scrollData = this._scrollData;
-		var tileSize = this._tileSize;
 
 		scrollData.x += deltaX;
 		if (scrollData.x < 0) {
 			while (scrollData.x < 0) {
-				scrollData.x += tileSize;
+				scrollData.x += this._tileWidth;
 				this.emit('ScrollRight', scrollData);
 				if (scrollData.maxX) {
 					break;
 				}
 			}
-		} else if (scrollData.x >= tileSize) {
-			while (scrollData.x >= tileSize) {
-				scrollData.x -= tileSize;
+		} else if (scrollData.x >= this._tileWidth) {
+			while (scrollData.x >= this._tileWidth) {
+				scrollData.x -= this._tileWidth;
 				this.emit('ScrollLeft', scrollData);
 				if (scrollData.maxX) {
 					break;
@@ -105,15 +105,15 @@ exports = Class(View, function (supr) {
 		scrollData.y += deltaY;
 		if (scrollData.y < 0) {
 			while (scrollData.y < 0) {
-				scrollData.y += tileSize;
+				scrollData.y += this._tileHeight;
 				this.emit('ScrollDown', scrollData);
 				if (scrollData.maxY) {
 					break;
 				}
 			}
-		} else if (scrollData.y >= tileSize) {
-			while (scrollData.y >= tileSize) {
-				scrollData.y -= tileSize;
+		} else if (scrollData.y >= this._tileHeight) {
+			while (scrollData.y >= this._tileHeight) {
+				scrollData.y -= this._tileHeight;
 				this.emit('ScrollUp', scrollData);
 				if (scrollData.maxY) {
 					break;
@@ -134,11 +134,10 @@ exports = Class(View, function (supr) {
 
 	this.setScale = function (scale) {
 		var content = this._content;
-		var tileSize = this._tileSize;
 		var lastWidth = content.style.width;
 		var lastHeight = content.style.height;
-		var newWidth = tileSize * this._adventureMapLayers[0].calcSizeX(scale);
-		var newHeight = tileSize * this._adventureMapLayers[0].calcSizeY(scale);
+		var newWidth = this._tileWidth * this._adventureMapLayers[0].calcSizeX(scale);
+		var newHeight = this._tileHeight * this._adventureMapLayers[0].calcSizeY(scale);
 
 		this._scrollData.scale = scale;
 		this._content.style.scale = scale;
@@ -150,11 +149,19 @@ exports = Class(View, function (supr) {
 		return this._scrollData.scale;
 	};
 
-	this.setTileSize = function (tileSize) {
-		this._tileSize = tileSize;
+	this.setTileWidth = function (tileWidth) {
+		this._tileWidth = tileWidth;
 
 		for (var i = 0; i < 3; i++) {
-			this._adventureMapLayers[i].setTileSize(tileSize);
+			this._adventureMapLayers[i].setTileWidth(tileWidth);
+		}
+	};
+
+	this.setTileHeight = function (tileHeight) {
+		this._tileHeight = tileHeight;
+
+		for (var i = 0; i < 3; i++) {
+			this._adventureMapLayers[i].setTileHeight(tileHeight);
 		}
 	};
 });
