@@ -26,6 +26,7 @@ exports = Class(Emitter, function () {
 			adventureMap: this._adventureMap,
 			zIndex: 999999999
 		});
+		this._cursorView.on('Update', bind(this, 'update'));
 
 		this._cursorView.on('NeedsPopulate', bind(opts.adventureMap.getAdventureMapView(), 'needsPopulate'));
 
@@ -45,6 +46,8 @@ exports = Class(Emitter, function () {
 		this._menuBarView.on('Bottom', bind(this, 'onBottomEdit'));
 		this._menuBarView.on('Tags', bind(this, 'onTagsEdit'));
 		this._menuBarView.on('Zoom', bind(this, 'onZoom'));
+		this._menuBarView.on('Clear', bind(this, 'onClear'));
+		this._menuBarView.on('Export', bind(this, 'onExport'));
 		this._menuBarView.on('Close', bind(this, 'onCloseEditor'));
 
 		this._lists = [];
@@ -281,5 +284,15 @@ exports = Class(Emitter, function () {
 		this._cursorView.style.visible = false;
 		this._scale = this._adventureMap.setScale(this._scale * 0.75);
 		this._zoomView.setScale(this._scale);
+	};
+
+	this.onExport = function () {
+		window.open('', 'adventureMapExport').document.write(JSON.stringify(this._adventureMapModel.toJSON()));
+	};
+
+	this.onClear = function () {
+		this._adventureMapModel.clear();
+		this.update();
+		this.saveMap();
 	};
 });

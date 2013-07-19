@@ -9,10 +9,10 @@ exports = Class(Emitter, function (supr) {
 		supr(this, 'init', [opts]);
 
 		this._model = new AdventureMapModel({
-			tileSize: 256,
-			width: 20,
-			height: 20,
-			defaultTile: 3
+			tileSize: opts.gridSettings.tileSize,
+			width: opts.gridSettings.width,
+			height: opts.gridSettings.height,
+			defaultTile: opts.gridSettings.defaultTile
 		});
 
 		this._scrollData = {
@@ -21,7 +21,7 @@ exports = Class(Emitter, function (supr) {
 			scale: 1
 		};
 
-		opts.tileSize = 256;
+		opts.tileSize = opts.gridSettings.tileSize;
 		opts.map = this._model.getMap();
 		opts.scrollData = this._scrollData;
 		this._adventureMapView = new AdventureMapView(opts);
@@ -61,6 +61,14 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.setScale(scale);
 
 		return scale;
+	};
+
+	this.load = function (data) {
+		this._model.load(data);
+
+		var modelData = this._model.getData();
+		this._adventureMapView.setTileSize(modelData.tileSize);
+		this._adventureMapView.onUpdate(modelData);
 	};
 
 	this.tick = function (dt) {

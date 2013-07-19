@@ -9,6 +9,11 @@ menuConstants.BUTTONS.GREEN.UP = 'resources/images/editor/button2Up.png';
 menuConstants.BUTTONS.RED.DOWN = 'resources/images/editor/button3Down.png';
 menuConstants.BUTTONS.RED.UP = 'resources/images/editor/button3Up.png';
 menuConstants.DIALOG.CONTENT_BORDER = 'resources/images/editor/contentBorder.png';
+menuConstants.DIALOG.CONTENT.BACKGROUND = 'resources/images/editor/item.png';
+menuConstants.DIALOG.BACKGROUND = 'resources/images/editor/background.png';
+menuConstants.TITLE.BACKGROUND = 'resources/images/editor/title.png';
+
+console.log(menuConstants);
 
 exports = Class(ButtonView, function(supr) {
 	this.init = function(opts) {
@@ -17,20 +22,12 @@ exports = Class(ButtonView, function(supr) {
 			{
 				on: {
 					up: bind(this, 'emit', 'Up')
-				},
-				text: {
-					fontFamily: 'BPReplay',
-					size: 26,
-					color: 'rgb(255, 255, 255)',
-					strokeColor: 'rgb(15, 111, 55)',
-					strokeWidth: 4,
-					autoSize: false,
-					autoFontSize: true,
-					wrap: false
 				}
 			}
 		);
 
-		supr(this, "init", [opts]);
+		supr(this, 'init', [opts]);
+
+		this._text.updateOpts({size: 26});
 	};
 });

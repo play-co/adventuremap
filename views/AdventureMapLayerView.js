@@ -139,4 +139,18 @@ exports = Class(GestureView, function (supr) {
 	this.getSizeY = function () {
 		return this._sizeY;
 	};
+
+	this.setTileSize = function (tileSize) {
+		var viewPool = this._viewPool;
+		var views = viewPool.getViews();
+		var length = viewPool.getLength();
+
+		while (length) {
+			var view = views[--length];
+			view.setTileSize && view.setTileSize(tileSize);
+		}
+
+		this._scale = null; // Forces the dimensions to be recalculated...	
+		this._tileSize = tileSize;
+	};
 });

@@ -145,4 +145,16 @@ exports = Class(View, function (supr) {
 
 		this.scroll((newWidth - lastWidth) * 0.5, (newHeight - lastHeight) * 0.5);
 	};
+
+	this.getScale = function () {
+		return this._scrollData.scale;
+	};
+
+	this.setTileSize = function (tileSize) {
+		this._tileSize = tileSize;
+
+		for (var i = 0; i < 3; i++) {
+			this._adventureMapLayers[i].setTileSize(tileSize);
+		}
+	};
 });

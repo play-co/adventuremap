@@ -37,6 +37,8 @@ exports = Class(View, function (supr) {
 
 		tile.x = point.x / this.style.width;
 		tile.y = point.y / this.style.height;
+
+		this.emit('Update');
 	};
 
 	this.tick = function (dt) {

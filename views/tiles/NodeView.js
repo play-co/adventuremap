@@ -12,8 +12,6 @@ exports = Class(ImageView, function (supr) {
 
 		supr(this, 'init', [opts]);
 
-		this._tileSize = opts.tileSize;
-
 		this._itemView = null;
 		this._itemRightView = null;
 		this._itemBottomView = null;

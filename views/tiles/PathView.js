@@ -153,4 +153,8 @@ exports = Class(ImageView, function (supr) {
 
 		this.style.visible = tile.right || tile.bottom;
 	};
+
+	this.setTileSize = function (tileSize) {
+		this._tileSize = tileSize;
+	};
 });

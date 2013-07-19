@@ -7,6 +7,7 @@ import ui.TextView as TextView;
 import ui.ScrollView as ScrollView;
 
 import menus.constants.menuConstants as menuConstants;
+import menus.views.TextDialogView as TextDialogView;
 
 import .components.TopBar as TopBar;
 import .components.EditButton as EditButton;
@@ -20,12 +21,14 @@ exports = Class(TopBar, function (supr) {
 		this._size = size;
 
 		var options = [
-				{title: 'Bottom', method: 'onBottom'},
-				{title: 'Right', method: 'onRight'},
-				{title: 'Node', method: 'onNode'},
-				{title: 'Tile', method: 'onTile'},
-				{title: 'Tags', method: 'onTags'},
-				{title: 'Zoom', method: 'onZoom'}
+				{title: 'Bottom', method: 'onBottom', style: 'GREEN'},
+				{title: 'Right', method: 'onRight', style: 'GREEN'},
+				{title: 'Node', method: 'onNode', style: 'GREEN'},
+				{title: 'Tile', method: 'onTile', style: 'GREEN'},
+				{title: 'Tags', method: 'onTags', style: 'GREEN'},
+				{title: 'Zoom', method: 'onZoom', style: 'GREEN'},
+				{title: 'Clear', method: 'onClear', style: 'RED'},
+				{title: 'Export', method: 'onExport', style: 'BLUE'}
 			];
 
 		var scrollView = new ScrollView({
@@ -53,7 +56,8 @@ exports = Class(TopBar, function (supr) {
 				y: 4,
 				width: 140,
 				height: size - 8,
-				title: option.title
+				title: option.title,
+				style: option.style
 			}).on('Up', bind(this, option.method));
 			x += 136;
 		}
@@ -97,6 +101,35 @@ exports = Class(TopBar, function (supr) {
 
 	this.onZoom = function () {
 		this.emit('Zoom');
+	};
+
+	this.onClear = function () {
+		this._confirmClearDialog = this._confirmClearDialog || new TextDialogView({
+			superview: this._superview,
+			title: 'Clear map',
+			text: 'Are you sure you want to clear this map?',
+			height: 450,
+			modal: true,
+			zIndex: 999999999,
+			buttons: [
+				{
+					title: 'No',
+					width: 200,
+					style: 'GREEN'
+				},
+				{
+					title: 'Yes',
+					width: 200,
+					style: 'RED',
+					cb: bind(this, 'emit', 'Clear')
+				}
+			]
+		});
+		this._confirmClearDialog.show();
+	};
+
+	this.onExport = function () {
+		this.emit('Export');
 	};
 
 	this.onClose = function () {
