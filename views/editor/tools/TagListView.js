@@ -55,22 +55,25 @@ exports = Class(BottomBar, function (supr) {
 		var i = this._tags.length;
 		while (i) {
 			var tag = this._tags[--i];
+			var button = this._buttons[i];
 			if (this._tile.tags && this._tile.tags[tag]) {
-				this._buttons[i].updateOpts({
+				button.updateOpts({
 					images: {
 						down: menuConstants.BUTTONS.GREEN.DOWN,
 						up: menuConstants.BUTTONS.GREEN.UP
 					}
 				});
-				this._buttons[i].setImage(menuConstants.BUTTONS.GREEN.UP);
+				button.setImage(menuConstants.BUTTONS.GREEN.UP);
+				button.getText().updateOpts({strokeColor: menuConstants.BUTTONS.GREEN.STROKE_COLOR});
 			} else {
-				this._buttons[i].updateOpts({
+				button.updateOpts({
 					images: {
 						down: menuConstants.BUTTONS.RED.DOWN,
 						up: menuConstants.BUTTONS.RED.UP
 					}
 				});
-				this._buttons[i].setImage(menuConstants.BUTTONS.RED.UP);
+				button.setImage(menuConstants.BUTTONS.RED.UP);
+				button.getText().updateOpts({strokeColor: menuConstants.BUTTONS.RED.STROKE_COLOR});
 			}
 		}
 	};

@@ -40,6 +40,7 @@ exports = Class(Emitter, function (supr) {
 		data.grid = grid;
 
 		this._data = data;
+		this._nodesByTag = {};
 		this._needsPopulate = false;
 
 		try {
@@ -71,6 +72,33 @@ exports = Class(Emitter, function (supr) {
 		this.emit('Update', this._data);
 	};
 
+	this.update = function () {
+		var data = this._data;
+		var grid = data.grid;
+		var width = data.width;
+		var height = data.height;
+
+		this._nodesByTag = {};
+
+		for (var y = 0; y < height; y++) {
+			for (var x = 0; x < width; x++) {
+				var tile = grid[y][x];
+				if ('tags' in tile) {
+					var tags = tile.tags;
+					tile.tileX = x;
+					tile.tileY = y;
+					for (var tag in tags) {
+						if (this._nodesByTag[tag]) {
+							this._nodesByTag[tag].push(tile);
+						} else {
+							this._nodesByTag[tag] = [tile];
+						}
+					}
+				}
+			}
+		}
+	};
+
 	this.getMap = function () {
 		return this._map;
 	};
@@ -96,6 +124,10 @@ exports = Class(Emitter, function (supr) {
 			return this._grid;
 		}
 		return this._data.grid[tileY][tileX];
+	};
+
+	this.getNodesByTag = function () {
+		return this._nodesByTag;
 	};
 
 	this.onSize = function (sizeX, sizeY) {
@@ -233,6 +265,8 @@ exports = Class(Emitter, function (supr) {
 		this._data.height = height;
 		this._data.tileSize = data.tileSize;
 
+		this._nodesByTag = {};
+
 		for (var y = 0; y < height; y++) {
 			var gridLine = grid[y];
 
@@ -251,6 +285,20 @@ exports = Class(Emitter, function (supr) {
 					}
 				}
 				delete tile.map;
+
+				if (tile.tags) {
+					var tags = tile.tags;
+					tile.tileX = x;
+					tile.tileY = y;
+					for (var tag in tags) {
+						if (this._nodesByTag[tag]) {
+							this._nodesByTag[tag].push(tile);
+						} else {
+							this._nodesByTag[tag] = [tile];
+						}
+					}
+				}
+
 				this._data.grid[y][x] = tile;
 			}
 
