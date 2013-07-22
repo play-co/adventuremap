@@ -77,4 +77,8 @@ exports = Class(Emitter, function (supr) {
 	this.tick = function (dt) {
 		this._model.tick(dt);
 	};
+
+	this.refreshTile = function (tileX, tileY) {
+		this._adventureMapView.refreshTile(tileX, tileY);
+	};
 });

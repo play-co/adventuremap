@@ -61,6 +61,9 @@ exports = Class(ImageView, function (supr) {
 
 			style.x = x - style.width * 0.5;
 			style.y = y - style.height * 0.5;
+
+			var labelView = this._labelView;
+			labelView.update && labelView.update(tile);
 		}
 		this.style.visible = tile.node;
 	};

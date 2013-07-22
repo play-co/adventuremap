@@ -21,6 +21,8 @@ exports = Class(BottomBar, function (supr) {
 
 		this._tile = null;
 		this._tags = opts.tags;
+		this._editor = opts.editor;
+		this._adventureMap = opts.adventureMap;
 		this._adventureMapModel = opts.adventureMapModel;
 		this._buttons = [];
 
@@ -91,5 +93,8 @@ exports = Class(BottomBar, function (supr) {
 			tile.tags[tag] = true;
 		}
 		this.updateTags();
+
+		this._adventureMap.refreshTile(this._tileX, this._tileY);
+		this._editor.saveMap();
 	};
 });

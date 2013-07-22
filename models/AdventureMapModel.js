@@ -6,7 +6,9 @@ var DEFAULT_TILE_VALUES = {
 		node: 0,
 		right: 0,
 		bottom: 0,
-		tags: 'anything'
+		tags: 'anything',
+		text: '',
+		title: ''
 	};
 
 exports = Class(Emitter, function (supr) {
@@ -255,6 +257,9 @@ exports = Class(Emitter, function (supr) {
 				tile.bottom = 0;
 				tile.x = 0.5;
 				tile.y = 0.5;
+				tile.title = '';
+				tile.text = '';
+				tile.tags = {};
 
 				mapLine[x] = this._defaultTile;
 			}
@@ -288,6 +293,9 @@ exports = Class(Emitter, function (supr) {
 				for (var i in DEFAULT_TILE_VALUES) {
 					// If there's no value and the value can't be "anything" then set the default:
 					if (!(i in tile) && (DEFAULT_TILE_VALUES[i] !== 'anything')) {
+						if (tile[i] !== undefined) {
+							console.log(i, tile[i]);
+						}
 						tile[i] = DEFAULT_TILE_VALUES[i];
 					}
 				}

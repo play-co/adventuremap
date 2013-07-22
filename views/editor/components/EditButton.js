@@ -13,8 +13,6 @@ menuConstants.DIALOG.CONTENT.BACKGROUND = 'resources/images/editor/item.png';
 menuConstants.DIALOG.BACKGROUND = 'resources/images/editor/background.png';
 menuConstants.TITLE.BACKGROUND = 'resources/images/editor/title.png';
 
-console.log(menuConstants);
-
 exports = Class(ButtonView, function(supr) {
 	this.init = function(opts) {
 		opts = merge(

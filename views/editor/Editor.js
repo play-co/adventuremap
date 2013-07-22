@@ -120,6 +120,8 @@ exports = Class(Emitter, function () {
 			canCancel: true,
 			padding: 10,
 			title: 'Tags',
+			editor: this,
+			adventureMap: this._adventureMap,
 			adventureMapModel: this._adventureMapModel
 		}));
 
@@ -135,6 +137,8 @@ exports = Class(Emitter, function () {
 			canCancel: true,
 			padding: 10,
 			title: 'Texts',
+			editor: this,
+			adventureMap: this._adventureMap,
 			adventureMapModel: this._adventureMapModel
 		}));
 
@@ -199,11 +203,11 @@ exports = Class(Emitter, function () {
 		}
 	};
 
-	this.showList = function (index, tileX, tileY) {
+	this.showList = function (index) {
 		var i = this._lists.length;
 		while (i) {
 			var list = this._lists[--i];
-			(i === index) ? list.show(tileX, tileY) : list.hide();
+			(i === index) ? list.show(this._tileX, this._tileY) : list.hide();
 		}
 	};
 
@@ -284,7 +288,7 @@ exports = Class(Emitter, function () {
 	};
 
 	this.onTagsEdit = function () {
-		this.showList(4, this._tileX, this._tileY);
+		this.showList(4);
 	};
 
 	this.onTextEdit = function () {

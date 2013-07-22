@@ -45,6 +45,8 @@ exports = Class(View, function (supr) {
 				paths: opts.paths,
 				nodes: opts.nodes,
 				labelCtor: opts.labelCtor || LabelView,
+				labelWidth: opts.labelWidth,
+				labelHeight: opts.labelHeight,
 				blockEvents: i > 0
 			}));
 		}
@@ -163,5 +165,11 @@ exports = Class(View, function (supr) {
 		for (var i = 0; i < 3; i++) {
 			this._adventureMapLayers[i].setTileHeight(tileHeight);
 		}
+	};
+
+	this.refreshTile = function (tileX, tileY) {
+		for (var i = 0; i < 3; i++) {
+			this._adventureMapLayers[i].refreshTile(tileX, tileY);
+		}		
 	};
 });

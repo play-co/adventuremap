@@ -14,6 +14,10 @@ exports = Class(GestureView, function (supr) {
 		this.style.x = -tileWidth;
 		this.style.y = -tileHeight;
 
+		this._grid = null; // Grid data controlled by model, needed here for updating individual tiles
+		this._tileX = 0; // Scroll offset, controlled by model
+		this._tileY = 0; // Scroll offset, controlled by model
+
 		this._tileWidth = tileWidth;
 		this._tileHeight = tileHeight;
 		this._tiles = opts.tiles ? this._loadTiles(opts.tiles) : [];
@@ -90,6 +94,10 @@ exports = Class(GestureView, function (supr) {
 		var views = viewPool.getViews();
 		var length = viewPool.getLength();
 		var index = 0;
+
+		this._grid = grid;
+		this._tileX = data.tileX; // Save, needed in refreshTile
+		this._tileY = data.tileY; // Save, needed in refreshTile
 
 		for (var y = 0; y < sizeY; y++) {
 			for (var x = 0; x < sizeX; x++) {
@@ -170,5 +178,15 @@ exports = Class(GestureView, function (supr) {
 
 		this._scale = null; // Forces the dimensions to be recalculated...	
 		this._tileHeight = tileHeight;
+	};
+
+	this.refreshTile = function (tileX, tileY) {
+		if ((tileX >= this._tileX) && (tileX < this._tileX + this._sizeX) &&
+			(tileY >= this._tileY) && (tileY < this._tileY + this._sizeY)) {
+			var x = tileX - this._tileX;
+			var y = tileY - this._tileY;
+
+			this._viewPool.getViews()[y * this._sizeX + x].update(this._grid, tileX, tileY);
+		}
 	};
 });
