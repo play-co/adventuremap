@@ -33,6 +33,7 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.on('ScrollRight', bind(this._model, 'onScrollRight'));
 		this._adventureMapView.on('ScrollUp', bind(this._model, 'onScrollUp'));
 		this._adventureMapView.on('ScrollDown', bind(this._model, 'onScrollDown'));
+		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
 
 		this._model.on('NeedsPopulate', bind(this._adventureMapView, 'needsPopulate'));
 		this._model.on('Update', bind(this._adventureMapView, 'onUpdate'));
@@ -80,5 +81,9 @@ exports = Class(Emitter, function (supr) {
 
 	this.refreshTile = function (tileX, tileY) {
 		this._adventureMapView.refreshTile(tileX, tileY);
+	};
+
+	this.onClickTag = function(tag, tile) {
+		console.log(tag, tile);
 	};
 });

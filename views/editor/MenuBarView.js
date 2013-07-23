@@ -1,3 +1,4 @@
+import device;
 import animate;
 
 import ui.View as View;
@@ -11,6 +12,8 @@ import menus.views.TextDialogView as TextDialogView;
 
 import .components.TopBar as TopBar;
 import .components.EditButton as EditButton;
+
+var InputPrompt = device.get('InputPrompt');
 
 exports = Class(TopBar, function (supr) {
 	this.init = function (opts) {
@@ -26,6 +29,7 @@ exports = Class(TopBar, function (supr) {
 				{title: 'Node', method: 'onNode', style: 'GREEN'},
 				{title: 'Tile', method: 'onTile', style: 'GREEN'},
 				{title: 'Tags', method: 'onTags', style: 'GREEN'},
+				{title: 'Id', method: 'onId', style: 'GREEN'},
 				{title: 'Text', method: 'onText', style: 'GREEN'},
 				{title: 'Zoom', method: 'onZoom', style: 'GREEN'},
 				{title: 'Clear', method: 'onClear', style: 'RED'},
@@ -78,6 +82,13 @@ exports = Class(TopBar, function (supr) {
 			},
 			style: 'RED'
 		}).on('Up', bind(this, 'onClose'));
+
+		this._prompt = new InputPrompt({
+			prompt: 'Enter the node Id:',
+			autoShowKeyboard: true,
+			isPassword: false,
+			onChange: bind(this, 'onChangeId')
+		});
 	};
 
 	this.onRight = function () {
@@ -98,6 +109,14 @@ exports = Class(TopBar, function (supr) {
 
 	this.onTags = function () {
 		this.emit('Tags');
+	};
+
+	this.onId = function () {
+		this._prompt.show();
+	};
+
+	this.onChangeId = function (value) {
+		value && this.emit('Id', value);
 	};
 
 	this.onText = function () {

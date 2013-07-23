@@ -21,7 +21,7 @@ exports = Class(ImageView, function (supr) {
 		this._tileX = 0;
 		this._tileY = 0;
 		this._map = opts.map;
-		this._tiles = opts.tiles;
+		this._tiles = opts.tileSettings.tiles;
 	};
 
 	this.update = function (grid, tileX, tileY) {

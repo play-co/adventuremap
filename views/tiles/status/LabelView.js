@@ -1,11 +1,14 @@
-import ui.View as View;
 import ui.TextView as TextView;
 import ui.ImageView as ImageView;
 
-exports = Class(View, function (supr) {
+import .NodeItemView;
+
+exports = Class(NodeItemView, function (supr) {
 	this.init = function (opts) {
 		supr(this, 'init', [opts]);
 
+		this.style.width = 200;
+		this.style.height = 200;
 		this.style.visible = false;
 
 		var size = this.style.width / 3;
@@ -53,16 +56,14 @@ exports = Class(View, function (supr) {
 				image: 'resources/images/icon/star.png'
 			}));
 		}
+
+		this.canHandleEvents(false);
 	};
 
 	this.update = function (tile) {
-		if ('Stars' in tile.tags) {
-			this.style.visible = true;
+		this._titleView.setText(tile.title || 'Title');
+		this._textView.setText(tile.text || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
 
-			this._titleView.setText(tile.title || 'Title');
-			this._textView.setText(tile.text || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
-		} else {
-			this.style.visible = false;
-		}
+		this.style.visible = true;
 	};
 });

@@ -24,28 +24,28 @@ exports = Class(GestureView, function (supr) {
 		this._map = opts.map;
 		this._scrollData = opts.scrollData;
 
+		this._nodeItemViews = [];
+
 		this._viewPool = new ViewPool({
 			initCount: 256,
 			ctor: opts.tileCtor,
 			initOpts: {
 				superview: this,
-				tileWidth: opts.tileWidth,
-				tileHeight: opts.tileHeight,
-				width: opts.tileWidth,
-				height: opts.tileHeight,
-				tiles: opts.tiles,
+				width: opts.tileSettings.tileWidth,
+				height: opts.tileSettings.tileHeight,
 				map: opts.map,
-				nodes: opts.nodes,
-				paths: opts.paths,
-				dotDistance: opts.dotDistance,
-				dashDistance: opts.dashDistance,
-				labelWidth: opts.labelWidth,
-				labelHeight: opts.labelHeight,
-				labelCtor: opts.labelCtor
+				tileSettings: opts.tileSettings,
+				pathSettings: opts.pathSettings,
+				nodeSettings: opts.nodeSettings,
+				editMode: opts.editMode
 			}
 		});
 
 		this._updateSize();
+	};
+
+	this.addNodeItemView = function(nodeItemView) {
+		this._nodeItemViews.push(nodeItemView);
 	};
 
 	this.calcSizeX = function (scale) {
@@ -85,6 +85,13 @@ exports = Class(GestureView, function (supr) {
 	};
 
 	this.populateView = function (data) {
+		var nodeItemViews = this._nodeItemViews;
+		var i = nodeItemViews.length;
+
+		while (i) {
+			nodeItemViews[--i].style.visible = false;
+		}
+
 		var grid = data.grid;
 		var tileWidth = this._tileWidth;
 		var tileHeight = this._tileHeight;

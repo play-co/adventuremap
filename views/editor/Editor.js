@@ -46,6 +46,7 @@ exports = Class(Emitter, function () {
 		this._menuBarView.on('Right', bind(this, 'onRightEdit'));
 		this._menuBarView.on('Bottom', bind(this, 'onBottomEdit'));
 		this._menuBarView.on('Tags', bind(this, 'onTagsEdit'));
+		this._menuBarView.on('Id', bind(this, 'onIdChange'));
 		this._menuBarView.on('Text', bind(this, 'onTextEdit'));
 		this._menuBarView.on('Zoom', bind(this, 'onZoom'));
 		this._menuBarView.on('Clear', bind(this, 'onClear'));
@@ -289,6 +290,16 @@ exports = Class(Emitter, function () {
 
 	this.onTagsEdit = function () {
 		this.showList(4);
+	};
+
+	this.onIdChange = function (id) {
+		if (this._tileX !== null) {
+			var adventureMapModel = this._adventureMapModel;
+			var data = adventureMapModel.getData();
+
+			data.grid[this._tileY][this._tileX].id = id;
+			this.update();
+		}
 	};
 
 	this.onTextEdit = function () {

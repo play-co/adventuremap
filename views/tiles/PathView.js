@@ -12,17 +12,17 @@ exports = Class(ImageView, function (supr) {
 
 		supr(this, 'init', [opts]);
 
-		this._tileWidth = opts.tileWidth;
-		this._tileHeight = opts.tileHeight;
+		this._tileWidth = opts.tileSettings.tileWidth;
+		this._tileHeight = opts.tileSettings.tileHeight;
 
 		this._itemRightView = null;
 		this._itemBottomView = null;
 
 		this._doAddPath = true;
 
-		this._paths = opts.paths;
-		this._dotDistance = opts.dotDistance;
-		this._dashDistance = opts.dashDistance;
+		this._paths = opts.pathSettings.paths;
+		this._dotDistance = opts.pathSettings.dotDistance;
+		this._dashDistance = opts.pathSettings.dashDistance;
 
 		this._tileX = 0;
 		this._tileY = 0;

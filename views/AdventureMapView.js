@@ -5,7 +5,6 @@ import .AdventureMapLayerView;
 import .tiles.TileView as TileView;
 import .tiles.PathView as PathView;
 import .tiles.NodeView as NodeView;
-import .tiles.LabelView as LabelView;
 
 exports = Class(View, function (supr) {
 	this.init = function (opts) {
@@ -17,6 +16,7 @@ exports = Class(View, function (supr) {
 		this._tileHeight = opts.tileHeight;
 		this._scrollData = opts.scrollData;
 		this._adventureMapLayers = [];
+		this._inputLayerIndex = opts.inputLayerIndex;
 
 		var ctors = [TileView, PathView, NodeView];
 
@@ -25,8 +25,7 @@ exports = Class(View, function (supr) {
 			x: 0,
 			y: 0,
 			width: 0,
-			height: 0,
-			backgroundColor: 'red'
+			height: 0
 		});
 
 		for (var i = 0; i < 3; i++) {
@@ -41,20 +40,19 @@ exports = Class(View, function (supr) {
 				tileCtor: ctors[i],
 				scrollData: opts.scrollData,
 				map: opts.map,
-				tiles: opts.tiles,
-				paths: opts.paths,
-				nodes: opts.nodes,
-				labelCtor: opts.labelCtor || LabelView,
-				labelWidth: opts.labelWidth,
-				labelHeight: opts.labelHeight,
-				blockEvents: i > 0
+				pathSettings: opts.pathSettings,
+				nodeSettings: opts.nodeSettings,
+				tileSettings: opts.tileSettings,
+				editMode: opts.editMode,
+				blockEvents: (i !== this._inputLayerIndex)
 			}));
 		}
+		this._adventureMapLayers[2].on('SelectNode', function(tile) { console.log(tile); });
 
 		this._content.style.width = this._adventureMapLayers[0].calcSizeX(0.5) * opts.tileWidth;
 		this._content.style.height = this._adventureMapLayers[0].calcSizeY(0.5) * opts.tileHeight;
 
-		this._gestureView = this._adventureMapLayers[0];
+		this._gestureView = this._adventureMapLayers[this._inputLayerIndex];
 		this._gestureView.on('DragSingle', bind(this, 'onDragSingle'));
 	};
 
@@ -71,6 +69,7 @@ exports = Class(View, function (supr) {
 
 		var content = this._content;
 		var scale = content.style.scale;
+
 		content.style.width = this._tileWidth * adventureMapLayer.getSizeX();
 		content.style.height = this._tileHeight * adventureMapLayer.getSizeY();
 		content.style.x = (this.style.width - content.style.width * scale) * 0.5;

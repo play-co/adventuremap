@@ -8,7 +8,8 @@ var DEFAULT_TILE_VALUES = {
 		bottom: 0,
 		tags: 'anything',
 		text: '',
-		title: ''
+		title: '',
+		id: ''
 	};
 
 exports = Class(Emitter, function (supr) {
@@ -135,6 +136,10 @@ exports = Class(Emitter, function (supr) {
 
 	this.getNodesByTag = function () {
 		return this._nodesByTag;
+	};
+
+	this.getNodesById = function () {
+		return this._nodesById;
 	};
 
 	this.onSize = function (sizeX, sizeY) {
@@ -278,6 +283,7 @@ exports = Class(Emitter, function (supr) {
 		this._data.tileHeight = data.tileHeight;
 
 		this._nodesByTag = {};
+		this._nodesById = {};
 
 		for (var y = 0; y < height; y++) {
 			var gridLine = grid[y];
@@ -312,6 +318,10 @@ exports = Class(Emitter, function (supr) {
 							this._nodesByTag[tag] = [tile];
 						}
 					}
+				}
+
+				if ('id' in tile) {
+					this._nodesById[tile.id] = tile;
 				}
 
 				this._data.grid[y][x] = tile;
