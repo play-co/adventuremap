@@ -37,6 +37,7 @@ exports = Class(Emitter, function (supr) {
 
 		this._model.on('NeedsPopulate', bind(this._adventureMapView, 'needsPopulate'));
 		this._model.on('Update', bind(this._adventureMapView, 'onUpdate'));
+		this._model.on('UpdateTile', bind(this._adventureMapView, 'refreshTile'));
 	};
 
 	this.getModel = function () {

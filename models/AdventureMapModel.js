@@ -142,6 +142,27 @@ exports = Class(Emitter, function (supr) {
 		return this._nodesById;
 	};
 
+	this.addTagById = function (id, tag) {
+		var tile = this._nodesById[id];
+		if (tile) {
+			if (!tile.tags) {
+				tile.tags = {};
+			}
+			tile.tags[tag] = true;
+			this.emit('UpdateTile', tile.tileX, tile.tileY);
+		}
+	};
+
+	this.removeTagById = function (id, tag) {
+		var tile = this._nodesById[id];
+		if (tile) {
+			if (tile.tags) {
+				delete tile.tags[tag];
+			}
+			this.emit('UpdateTile', tile.tileX, tile.tileY);
+		}
+	};
+
 	this.onSize = function (sizeX, sizeY) {
 		this._maxX = this._data.width - sizeX;
 		this._maxY = this._data.height - sizeY;

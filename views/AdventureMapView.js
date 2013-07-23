@@ -81,6 +81,14 @@ exports = Class(View, function (supr) {
 		this.emit('Scroll');
 	};
 
+	this.onAddTag = function (tileX, tileY, tag) {
+		this._adventureMapLayers[2].addTag(tileX, tileY, tag);
+	};
+
+	this.onRemoveTag = function (tileX, tileY, tag) {
+		console.log(tileX, tileY, tag);
+	};
+
 	this.scroll = function (deltaX, deltaY) {
 		var scrollData = this._scrollData;
 
