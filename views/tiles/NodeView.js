@@ -22,9 +22,13 @@ exports = Class(ImageView, function (supr) {
 
 		this._editMode = opts.editMode;
 
+		this._doodadView = new ImageView({
+			superview: this
+		});
 		this._itemView = new ImageView({
 			superview: this
 		});
+
 		if (opts.editMode) {
 			this._idText = new TextView({
 				superview: this._itemView,
@@ -44,6 +48,8 @@ exports = Class(ImageView, function (supr) {
 		this._itemCtors = opts.nodeSettings.itemCtors;
 		this._hideViews = {};
 
+		this._tileSettings = opts.tileSettings;
+		this._doodads = opts.tileSettings.doodads;
 		this._nodes = opts.nodeSettings.nodes;
 
 		this.canHandleEvents(false);
@@ -65,6 +71,7 @@ exports = Class(ImageView, function (supr) {
 			style.y = y - node.height * 0.5;
 			style.width = node.width;
 			style.height = node.height;
+			style.visible = true;
 
 			this._itemView.setImage(node.image);
 			if (this._editMode) {
@@ -99,6 +106,7 @@ exports = Class(ImageView, function (supr) {
 							tile: tile
 						});
 						itemViews[tag] = itemView;
+						this._superview.addNodeItemView(itemView);
 					}
 					itemView.style.x = this.style.x + x - itemView.style.width * 0.5 + (itemView.offsetX || 0);
 					itemView.style.y = this.style.y + y - itemView.style.height * 0.5 + (itemView.offsetY || 0);
@@ -118,8 +126,25 @@ exports = Class(ImageView, function (supr) {
 				this._addItemEmitter = false;
 				this._itemView.on('InputSelect', bind(this, 'onSelectNode', tile));
 			}
+		} else {
+			this._itemView.style.visible = false;
 		}
-		this.style.visible = tile.node;
+
+		if (tile.doodad) {
+			var doodad = this._doodads[tile.doodad - 1];
+			var style = this._doodadView.style;
+
+			this._doodadView.setImage(doodad.image);
+			style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
+			style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
+			style.width = doodad.width;
+			style.height = doodad.height;
+			style.visible = true;
+		} else {
+			this._doodadView.style.visible = false;
+		}
+
+		this.style.visible = tile.node || tile.doodad;
 	};
 
 	this.onSelectNode = function (tile) {

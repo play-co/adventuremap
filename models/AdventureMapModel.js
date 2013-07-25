@@ -137,7 +137,7 @@ exports = Class(Emitter, function (supr) {
 	};
 
 	this.getGrid = function (tileX, tileY) {
-		if (tileX === undefined) {
+		if (tileY === undefined) {
 			return this._grid;
 		}
 		return this._data.grid[tileY][tileX];

@@ -92,7 +92,7 @@ exports = Class(Emitter, function () {
 			images: opts.tileSettings.doodads,
 			canCancel: true,
 			visible: false,
-			title: 'Tile'
+			title: 'Doodad'
 		}).on('Select', bind(this, 'onSelectDoodad')));
 
 		// Nodes
@@ -253,7 +253,6 @@ exports = Class(Emitter, function () {
 			var keys = Object.keys(event.point);
 			var point = event.point[keys[keys.length - 1]];
 
-			console.log(this._tileSettings);
 			switch (this._tool) {
 				case OPTION_TILES:
 					tile.x = point.x / this._tileSettings.tileWidth;
