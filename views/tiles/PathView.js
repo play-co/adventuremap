@@ -9,6 +9,10 @@ import ..ViewPool;
 exports = Class(ImageView, function (supr) {
 	this.init = function (opts) {
 		opts.blockEvents = true;
+		opts.width = opts.tileSettings.tileWidth;
+		opts.height = opts.tileSettings.tileHeight;
+
+		supr(this, 'init', [opts]);
 
 		supr(this, 'init', [opts]);
 

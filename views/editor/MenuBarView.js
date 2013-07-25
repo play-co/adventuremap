@@ -28,6 +28,7 @@ exports = Class(TopBar, function (supr) {
 				{title: 'Right', method: 'onRight', style: 'GREEN'},
 				{title: 'Node', method: 'onNode', style: 'GREEN'},
 				{title: 'Tile', method: 'onTile', style: 'GREEN'},
+				{title: 'Doodad', method: 'onDoodad', style: 'GREEN'},
 				{title: 'Tags', method: 'onTags', style: 'GREEN'},
 				{title: 'Id', method: 'onId', style: 'GREEN'},
 				{title: 'Text', method: 'onText', style: 'GREEN'},
@@ -105,6 +106,10 @@ exports = Class(TopBar, function (supr) {
 
 	this.onTile = function () {
 		this.emit('Tile');
+	};
+
+	this.onDoodad = function () {
+		this.emit('Doodad');
 	};
 
 	this.onTags = function () {

@@ -14,6 +14,8 @@ exports = Class(GestureView, function (supr) {
 		this.style.x = -tileWidth;
 		this.style.y = -tileHeight;
 
+		this._adventureMapView = opts.adventureMapView;
+
 		this._grid = null; // Grid data controlled by model, needed here for updating individual tiles
 		this._tileX = 0; // Scroll offset, controlled by model
 		this._tileY = 0; // Scroll offset, controlled by model
@@ -31,8 +33,7 @@ exports = Class(GestureView, function (supr) {
 			ctor: opts.tileCtor,
 			initOpts: {
 				superview: this,
-				width: opts.tileSettings.tileWidth,
-				height: opts.tileSettings.tileHeight,
+				adventureMapView: this._adventureMapView,
 				map: opts.map,
 				tileSettings: opts.tileSettings,
 				pathSettings: opts.pathSettings,
@@ -49,18 +50,18 @@ exports = Class(GestureView, function (supr) {
 	};
 
 	this.calcSizeX = function (scale) {
-		var width = this._superview.getSuperview().style.width; // AdventureMapView
+		var width = this._adventureMapView.style.width; // AdventureMapView
 		return Math.ceil(width / (this._tileWidth * scale)) + 2;
 	};
 
 	this.calcSizeY = function (scale) {
-		var height = this._superview.getSuperview().style.height; // AdventureMapView
+		var height = this._adventureMapView.style.height; // AdventureMapView
 		return Math.ceil(height / (this._tileHeight * scale)) + 2;
 	};
 
 	this._updateSize = function () {
-		var width = this._superview.getSuperview().style.width; // AdventureMapView
-		var height = this._superview.getSuperview().style.height; // AdventureMapView
+		var width = this._adventureMapView.style.width; // AdventureMapView
+		var height = this._adventureMapView.style.height; // AdventureMapView
 		var scale = this._superview.style.scale; // AdventureMapView._content
 
 		if ((width !== this._width) || (height !== this._height) || (scale !== this._scale)) {

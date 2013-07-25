@@ -8,11 +8,14 @@ import ..ViewPool;
 
 exports = Class(ImageView, function (supr) {
 	this.init = function (opts) {
+		opts.width = opts.tileSettings.tileWidth,
+		opts.height = opts.tileSettings.tileHeight,
+
 		supr(this, 'init', [opts]);
 
+		this._adventureMapView = opts.adventureMapView;
+
 		this._itemView = null;
-		this._itemRightView = null;
-		this._itemBottomView = null;
 
 		this._tileX = 0;
 		this._tileY = 0;
@@ -90,16 +93,16 @@ exports = Class(ImageView, function (supr) {
 					if (!itemView) {
 						itemView = new this._itemCtors[tag]({
 							superview: this._superview,
+							adventureMapView: this._adventureMapView,
 							zIndex: 999999999,
 							tag: tag,
 							tile: tile
 						});
-						this._superview.addNodeItemView(itemView);
 						itemViews[tag] = itemView;
 					}
 					itemView.style.x = this.style.x + x - itemView.style.width * 0.5 + (itemView.offsetX || 0);
 					itemView.style.y = this.style.y + y - itemView.style.height * 0.5 + (itemView.offsetY || 0);
-					itemView.update(tile);
+					itemView.update && itemView.update(tile);
 
 					hideViews[tag] = null;
 				}
@@ -120,6 +123,6 @@ exports = Class(ImageView, function (supr) {
 	};
 
 	this.onSelectNode = function (tile) {
-		console.log('node', tile);
+		this._adventureMapView.emit('ClickNode', tile);
 	};
 });

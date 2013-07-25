@@ -31,6 +31,7 @@ exports = Class(View, function (supr) {
 		for (var i = 0; i < 3; i++) {
 			this._adventureMapLayers.push(new AdventureMapLayerView({
 				superview: this._content,
+				adventureMapView: this,
 				x: opts.x,
 				y: opts.y,
 				width: opts.width,

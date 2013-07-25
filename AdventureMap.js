@@ -22,6 +22,11 @@ exports = Class(Emitter, function (supr) {
 			scale: 1
 		};
 
+		this._gridSettings = opts.gridSettings;
+		this._tileSettings = opts.tileSettings;
+		this._pathSettings = opts.pathSettings;
+		this._nodeSettings = opts.nodeSettings;
+
 		opts.tileWidth = opts.gridSettings.tileWidth;
 		opts.tileHeight = opts.gridSettings.tileHeight;
 		opts.map = this._model.getMap();
@@ -34,10 +39,15 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.on('ScrollUp', bind(this._model, 'onScrollUp'));
 		this._adventureMapView.on('ScrollDown', bind(this._model, 'onScrollDown'));
 		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
+		this._adventureMapView.on('ClickNode', bind(this, 'onClickNode'));
 
 		this._model.on('NeedsPopulate', bind(this._adventureMapView, 'needsPopulate'));
 		this._model.on('Update', bind(this._adventureMapView, 'onUpdate'));
 		this._model.on('UpdateTile', bind(this._adventureMapView, 'refreshTile'));
+
+		this._adventureMapView.tick = bind(this, function(dt) {
+			this._adventureMapView.style.visible && this._model.tick(dt);
+		});
 	};
 
 	this.getModel = function () {
@@ -76,15 +86,15 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.onUpdate(modelData);
 	};
 
-	this.tick = function (dt) {
-		this._model.tick(dt);
-	};
-
 	this.refreshTile = function (tileX, tileY) {
 		this._adventureMapView.refreshTile(tileX, tileY);
 	};
 
-	this.onClickTag = function(tag, tile) {
-		console.log(tag, tile);
+	this.onClickTag = function (tag, tile) {
+		this.emit('ClickTag', tag, tile);
+	};
+
+	this.onClickNode = function (tile) {
+		this.emit('ClickNode', tile);
 	};
 });

@@ -8,6 +8,15 @@ import .tools.TextEditView as TextEditView;
 import .CursorView;
 import .MenuBarView;
 
+var OPTION_TILES = 0;
+var OPTION_DOODADS = 1;
+var OPTION_NODES = 2;
+var OPTION_RIGHT_PATH = 3;
+var OPTION_BOTTOM_PATH = 4;
+var OPTION_TAGS = 5;
+var OPTION_TEXT_EDIT = 6;
+var OPTION_ZOOM = 7;
+
 exports = Class(Emitter, function () {
 	this.init = function (opts) {
 		this._adventureMap = opts.adventureMap;
@@ -43,6 +52,7 @@ exports = Class(Emitter, function () {
 
 		this._menuBarView.on('Tile', bind(this, 'onTileEdit'));
 		this._menuBarView.on('Node', bind(this, 'onNodeEdit'));
+		this._menuBarView.on('Doodad', bind(this, 'onDoodadEdit'));
 		this._menuBarView.on('Right', bind(this, 'onRightEdit'));
 		this._menuBarView.on('Bottom', bind(this, 'onBottomEdit'));
 		this._menuBarView.on('Tags', bind(this, 'onTagsEdit'));
@@ -66,6 +76,18 @@ exports = Class(Emitter, function () {
 			visible: false,
 			title: 'Tile'
 		}).on('Select', bind(this, 'onSelectTile')));
+
+		// Doodads
+		this._lists.push(new ImageListView({
+			superview: opts.superview,
+			x: 0,
+			y: opts.height - 96,
+			width: opts.width,
+			height: 96,
+			images: opts.doodads,
+			visible: false,
+			title: 'Tile'
+		}).on('Select', bind(this, 'onSelectDoodad')));
 
 		// Nodes
 		this._lists.push(new ImageListView({
@@ -227,7 +249,31 @@ exports = Class(Emitter, function () {
 	};
 
 	this.onTileEdit = function () {
-		this.showList(0);
+		this.showList(OPTION_TILES);
+	};
+
+	this.onDoodadEdit = function () {
+		this.showList(OPTION_DOODADS);
+	};
+
+	this.onNodeEdit = function () {
+		this.showList(OPTION_NODES);
+	};
+
+	this.onRightEdit = function () {
+		this.showList(OPTION_RIGHT_PATH);
+	};
+
+	this.onBottomEdit = function () {
+		this.showList(OPTION_BOTTOM_PATH);
+	};
+
+	this.onTagsEdit = function () {
+		this.showList(OPTION_TAGS);
+	};
+
+	this.onTextEdit = function () {
+		this.showList(OPTION_TEXT_EDIT);
 	};
 
 	/**
@@ -241,8 +287,15 @@ exports = Class(Emitter, function () {
 		}
 	};
 
-	this.onNodeEdit = function () {
-		this.showList(1);
+	/**
+	 * Change the decoration...
+	 */
+	this.onSelectDoodad = function (index) {
+		if (this._tileX !== null) {
+			//this._map[this._tileY][this._tileX] = index;
+			this._adventureMap.getAdventureMapLayers()[0].needsPopulate();
+			this.saveMap();
+		}
 	};
 
 	/**
@@ -259,10 +312,6 @@ exports = Class(Emitter, function () {
 		}
 	};
 
-	this.onRightEdit = function () {
-		this.showList(2);
-	};
-
 	this.onSelectRightPath = function (index) {
 		if (this._tileX !== null) {
 			var adventureMapModel = this._adventureMapModel;
@@ -272,10 +321,6 @@ exports = Class(Emitter, function () {
 			this.update();
 			this.saveMap();
 		}
-	};
-
-	this.onBottomEdit = function () {
-		this.showList(3);
 	};
 
 	this.onSelectBottomPath = function (index) {
@@ -288,10 +333,6 @@ exports = Class(Emitter, function () {
 		}
 	};
 
-	this.onTagsEdit = function () {
-		this.showList(4);
-	};
-
 	this.onIdChange = function (id) {
 		if (this._tileX !== null) {
 			var adventureMapModel = this._adventureMapModel;
@@ -302,12 +343,8 @@ exports = Class(Emitter, function () {
 		}
 	};
 
-	this.onTextEdit = function () {
-		this.showList(5);
-	};
-
 	this.onZoom = function () {
-		this.showList(6);
+		this.showList(OPTION_ZOOM);
 	};
 
 	this.onZoomIn = function () {

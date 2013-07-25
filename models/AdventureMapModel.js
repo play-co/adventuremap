@@ -44,7 +44,13 @@ exports = Class(Emitter, function (supr) {
 		data.grid = grid;
 
 		this._data = data;
+
+		this._maxNodeId = 0;
+		this._minNodeId = 999999;
+
 		this._nodesByTag = {};
+		this._nodesById = {};
+
 		this._needsPopulate = false;
 
 		try {
@@ -140,6 +146,14 @@ exports = Class(Emitter, function (supr) {
 
 	this.getNodesById = function () {
 		return this._nodesById;
+	};
+
+	this.getMaxNodeId = function () {
+		return this._maxNodeId;
+	};
+
+	this.getMinNodeId = function () {
+		return this._minNodeId;
 	};
 
 	this.addTagById = function (id, tag) {
@@ -306,6 +320,9 @@ exports = Class(Emitter, function (supr) {
 		this._nodesByTag = {};
 		this._nodesById = {};
 
+		this._maxNodeId = 0;
+		this._minNodeId = 999999;
+
 		for (var y = 0; y < height; y++) {
 			var gridLine = grid[y];
 
@@ -342,6 +359,11 @@ exports = Class(Emitter, function (supr) {
 				}
 
 				if ('id' in tile) {
+					var nodeId = parseInt(tile.id, 10);
+					if (!isNaN(nodeId)) {
+						this._minNodeId = Math.min(this._minNodeId, nodeId);
+						this._maxNodeId = Math.max(this._maxNodeId, nodeId);
+					}
 					this._nodesById[tile.id] = tile;
 				}
 
