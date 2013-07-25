@@ -38,7 +38,9 @@ exports = Class(Emitter, function () {
 		});
 		this._cursorView.on('Update', bind(this, 'update'));
 
-		this._cursorView.on('NeedsPopulate', bind(opts.adventureMap.getAdventureMapView(), 'needsPopulate'));
+		this._cursorView.
+			on('NeedsPopulate', bind(opts.adventureMap.getAdventureMapView(), 'needsPopulate')).
+			on('InputSelect', bind(this, 'onCursorInputSelect'));
 
 		this._menuBarView = new MenuBarView({
 			superview: opts.superview,
@@ -64,6 +66,9 @@ exports = Class(Emitter, function () {
 		this._menuBarView.on('Close', bind(this, 'onCloseEditor'));
 
 		this._lists = [];
+		this._tool = -1;
+
+		this._tileSettings = opts.tileSettings;
 
 		// Tiles
 		this._lists.push(new ImageListView({
@@ -72,7 +77,7 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			images: opts.tiles,
+			images: opts.tileSettings.tiles,
 			visible: false,
 			title: 'Tile'
 		}).on('Select', bind(this, 'onSelectTile')));
@@ -84,7 +89,8 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			images: opts.doodads,
+			images: opts.tileSettings.doodads,
+			canCancel: true,
 			visible: false,
 			title: 'Tile'
 		}).on('Select', bind(this, 'onSelectDoodad')));
@@ -96,7 +102,7 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			images: opts.nodes,
+			images: opts.nodeSettings.nodes,
 			visible: false,
 			canCancel: true,
 			padding: 10,
@@ -110,7 +116,7 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			images: opts.paths,
+			images: opts.pathSettings.paths,
 			visible: false,
 			canCancel: true,
 			padding: 10,
@@ -124,7 +130,7 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			images: opts.paths,
+			images: opts.pathSettings.paths,
 			visible: false,
 			canCancel: true,
 			padding: 10,
@@ -138,7 +144,7 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			tags: opts.tags,
+			tags: opts.gridSettings.tags,
 			visible: false,
 			canCancel: true,
 			padding: 10,
@@ -155,7 +161,6 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			tags: opts.tags,
 			visible: false,
 			canCancel: true,
 			padding: 10,
@@ -172,7 +177,6 @@ exports = Class(Emitter, function () {
 			y: opts.height - 96,
 			width: opts.width,
 			height: 96,
-			tags: opts.tags,
 			visible: false,
 			canCancel: true,
 			padding: 10,
@@ -227,6 +231,7 @@ exports = Class(Emitter, function () {
 	};
 
 	this.showList = function (index) {
+		this._tool = index;
 		var i = this._lists.length;
 		while (i) {
 			var list = this._lists[--i];
@@ -237,6 +242,36 @@ exports = Class(Emitter, function () {
 	this.saveMap = function () {
 		var data = this._adventureMapModel.toJSON();
 		localStorage.setItem('MAP_DATA', JSON.stringify(data));		
+	};
+
+	this.onCursorInputSelect = function(event) {
+		if (this._tileX !== null) {
+			var adventureMapModel = this._adventureMapModel;
+			var data = adventureMapModel.getData();
+
+			var tile = data.grid[this._tileY][this._tileX];
+			var keys = Object.keys(event.point);
+			var point = event.point[keys[keys.length - 1]];
+
+			console.log(this._tileSettings);
+			switch (this._tool) {
+				case OPTION_TILES:
+					tile.x = point.x / this._tileSettings.tileWidth;
+					tile.y = point.y / this._tileSettings.tileHeight;
+					this.update();
+					this.saveMap();
+					break;
+
+				case OPTION_DOODADS:
+					if (tile.doodad) {
+						tile.doodadX = point.x / this._tileSettings.tileWidth;
+						tile.doodadY = point.y / this._tileSettings.tileHeight;
+						this.update();
+						this.saveMap();
+					}
+					break;
+			}
+		}
 	};
 
 	this.onSave = function () {
@@ -292,7 +327,10 @@ exports = Class(Emitter, function () {
 	 */
 	this.onSelectDoodad = function (index) {
 		if (this._tileX !== null) {
-			//this._map[this._tileY][this._tileX] = index;
+			var adventureMapModel = this._adventureMapModel;
+			var data = adventureMapModel.getData();
+
+			data.grid[this._tileY][this._tileX].doodad = index;
 			this._adventureMap.getAdventureMapLayers()[0].needsPopulate();
 			this.saveMap();
 		}

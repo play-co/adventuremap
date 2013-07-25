@@ -29,18 +29,6 @@ exports = Class(View, function (supr) {
 		this.style.visible = true;
 	};
 
-	this.onInputSelect = function (event) {
-		var adventureMapModel = this._adventureMapModel;
-		var tile = adventureMapModel.getData().grid[this._tileY][this._tileX];
-		var keys = Object.keys(event.point);
-		var point = event.point[keys[keys.length - 1]];
-
-		tile.x = point.x / this.style.width;
-		tile.y = point.y / this.style.height;
-
-		this.emit('Update');
-	};
-
 	this.tick = function (dt) {
 		this._dt += dt;
 		var color = (Math.abs(Math.sin(this._dt * 0.002)) * 255) | 0;
