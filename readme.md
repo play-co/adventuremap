@@ -10,6 +10,8 @@ The map contains a model, your can [read about the model here](model.md).
 The map can be configured with settings objects, there are settings for the background, 
 the nodes, items and tags.
 
+You can read more detailed information about the settings [here](../settings.md).
+
 ### Tags
 
 A node can be tagged, it's possible to define a view for a tag, when a node has a
@@ -85,7 +87,7 @@ Parameters
  + `tileX {number}` ---The x position on the grid, must be an integer.
  + `tileY {number}` ---The y position on the grid, must be an integer.
 
- #### Events
+#### Events
 
 __'ClickTag', callback(tag, tile)__
 
@@ -95,7 +97,7 @@ Parameters
  + `tag {string}` ---The tag which is clicked.
  + `tile {object}` ---The tile on which the tag is placed, contains a `tileX` and `tileY` property.
 
-__`ClickNode`, callback(tile)__
+__'ClickNode', callback(tile)__
 
 Called when a node -which represents a level- is clicked.
 

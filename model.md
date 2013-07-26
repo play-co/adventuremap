@@ -1,3 +1,4 @@
+Back to [adventure map documentation](../readme.md).
 ### AdventureModel class
 
 The `AdventureModel` class is constructed by the `AdventureMap`, you don't have
