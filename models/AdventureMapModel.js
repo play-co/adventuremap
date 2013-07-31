@@ -6,6 +6,8 @@ var DEFAULT_TILE_VALUES = {
 		node: 0,
 		right: 0,
 		bottom: 0,
+		rightTop: 0,
+		rightBottom: 0,		
 		doodad: 0,
 		doodadX: 0.5,
 		doodadY: 0.5,
@@ -70,7 +72,7 @@ exports = Class(Emitter, function (supr) {
 		for (var y = 0; y < height; y++) {
 			result[y] = [];
 			for (var x = 0; x < width; x++) {
-				result[y][x] = value;
+				result[y][x] = (height - y - 1) * width + x;
 			}
 		}
 		return result;

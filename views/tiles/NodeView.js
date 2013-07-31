@@ -35,10 +35,10 @@ exports = Class(ImageView, function (supr) {
 				x: 0,
 				y: 0,
 				fontFamily: 'BPReplay',
-				size: 36,
+				size: 60,
 				color: '#FFFFFF',
 				strokeColor: '#000000',
-				strokeWidth: 4,
+				strokeWidth: 8,
 				text: 'Id',
 				blockEvents: true
 			});

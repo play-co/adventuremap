@@ -8,8 +8,8 @@ exports = Class(GestureView, function (supr) {
 	this.init = function (opts) {
 		supr(this, 'init', [opts]);
 
-		var tileWidth = opts.tileWidth;
-		var tileHeight = opts.tileHeight;
+		var tileWidth = opts.tileSettings.tileWidth;
+		var tileHeight = opts.tileSettings.tileHeight;
 
 		this.style.x = -tileWidth;
 		this.style.y = -tileHeight;
@@ -22,10 +22,11 @@ exports = Class(GestureView, function (supr) {
 
 		this._tileWidth = tileWidth;
 		this._tileHeight = tileHeight;
-		this._tiles = opts.tiles ? this._loadTiles(opts.tiles) : [];
+		this._tiles = opts.tileSettings.tiles ? this._loadTiles(opts.tileSettings.tiles) : [];
 		this._map = opts.map;
 		this._scrollData = opts.scrollData;
 
+		this._editMode = opts.editMode;
 		this._nodeItemViews = [];
 
 		this._viewPool = new ViewPool({
@@ -107,6 +108,8 @@ exports = Class(GestureView, function (supr) {
 		this._tileX = data.tileX; // Save, needed in refreshTile
 		this._tileY = data.tileY; // Save, needed in refreshTile
 
+		var margin = this._editMode ? 5 : 0;
+
 		for (var y = 0; y < sizeY; y++) {
 			for (var x = 0; x < sizeX; x++) {
 				var view;
@@ -119,8 +122,8 @@ exports = Class(GestureView, function (supr) {
 				view.style.zIndex = sizeX * sizeY - index;
 				view.style.x = x * tileWidth;
 				view.style.y = y * tileHeight;
-				view.style.width = tileWidth;
-				view.style.height = tileHeight;
+				view.style.width = tileWidth - margin;
+				view.style.height = tileHeight - margin;
 				view.update(grid, data.tileX + x, data.tileY + y);
 				index++;
 			}

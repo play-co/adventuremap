@@ -26,6 +26,8 @@ exports = Class(TopBar, function (supr) {
 		var options = [
 				{title: 'Bottom', method: 'onBottom', style: 'GREEN'},
 				{title: 'Right', method: 'onRight', style: 'GREEN'},
+				{title: 'Rt Top', method: 'onRightTop', style: 'GREEN'},
+				{title: 'Rt Botm', method: 'onRightBottom', style: 'GREEN'},
 				{title: 'Node', method: 'onNode', style: 'GREEN'},
 				{title: 'Tile', method: 'onTile', style: 'GREEN'},
 				{title: 'Doodad', method: 'onDoodad', style: 'GREEN'},
@@ -98,6 +100,16 @@ exports = Class(TopBar, function (supr) {
 
 	this.onBottom = function () {
 		this.emit('Bottom');
+	};
+
+	this.onRightTop = function () {
+		console.log(1);
+		this.emit('RightTop');
+	};
+
+	this.onRightBottom = function () {
+		console.log(2);
+		this.emit('RightBottom');
 	};
 
 	this.onNode = function () {

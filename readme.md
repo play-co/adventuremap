@@ -10,7 +10,7 @@ The map contains a model, your can [read about the model here](model.md).
 The map can be configured with settings objects, there are settings for the background, 
 the nodes, items and tags.
 
-You can read more detailed information about the settings [here](../settings.md).
+You can read more detailed information about the settings [here](settings.md).
 
 ### Tags
 

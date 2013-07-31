@@ -13,9 +13,11 @@ var OPTION_DOODADS = 1;
 var OPTION_NODES = 2;
 var OPTION_RIGHT_PATH = 3;
 var OPTION_BOTTOM_PATH = 4;
-var OPTION_TAGS = 5;
-var OPTION_TEXT_EDIT = 6;
-var OPTION_ZOOM = 7;
+var OPTION_RIGHT_TOP_PATH = 5;
+var OPTION_RIGHT_BOTTOM_PATH = 6;
+var OPTION_TAGS = 7;
+var OPTION_TEXT_EDIT = 8;
+var OPTION_ZOOM = 9;
 
 exports = Class(Emitter, function () {
 	this.init = function (opts) {
@@ -57,6 +59,8 @@ exports = Class(Emitter, function () {
 		this._menuBarView.on('Doodad', bind(this, 'onDoodadEdit'));
 		this._menuBarView.on('Right', bind(this, 'onRightEdit'));
 		this._menuBarView.on('Bottom', bind(this, 'onBottomEdit'));
+		this._menuBarView.on('RightTop', bind(this, 'onRightTopEdit'));
+		this._menuBarView.on('RightBottom', bind(this, 'onRightBottomEdit'));
 		this._menuBarView.on('Tags', bind(this, 'onTagsEdit'));
 		this._menuBarView.on('Id', bind(this, 'onIdChange'));
 		this._menuBarView.on('Text', bind(this, 'onTextEdit'));
@@ -136,6 +140,34 @@ exports = Class(Emitter, function () {
 			padding: 10,
 			title: 'Bottom path'
 		}).on('Select', bind(this, 'onSelectBottomPath')));
+
+		// Right top path
+		this._lists.push(new ImageListView({
+			superview: opts.superview,
+			x: 0,
+			y: opts.height - 96,
+			width: opts.width,
+			height: 96,
+			images: opts.pathSettings.paths,
+			visible: false,
+			canCancel: true,
+			padding: 10,
+			title: 'Right top path'
+		}).on('Select', bind(this, 'onSelectRightTopPath')));
+
+		// Right bottom path
+		this._lists.push(new ImageListView({
+			superview: opts.superview,
+			x: 0,
+			y: opts.height - 96,
+			width: opts.width,
+			height: 96,
+			images: opts.pathSettings.paths,
+			visible: false,
+			canCancel: true,
+			padding: 10,
+			title: 'Right bottom path'
+		}).on('Select', bind(this, 'onSelectRightBottomPath')));
 
 		// Tags
 		this._lists.push(new TagListView({
@@ -231,7 +263,9 @@ exports = Class(Emitter, function () {
 	};
 
 	this.showList = function (index) {
-		this._tool = index;
+		if (index >= 0) {
+			this._tool = index;
+		}
 		var i = this._lists.length;
 		while (i) {
 			var list = this._lists[--i];
@@ -254,7 +288,7 @@ exports = Class(Emitter, function () {
 			var point = event.point[keys[keys.length - 1]];
 
 			switch (this._tool) {
-				case OPTION_TILES:
+				case OPTION_NODES:
 					tile.x = point.x / this._tileSettings.tileWidth;
 					tile.y = point.y / this._tileSettings.tileHeight;
 					this.update();
@@ -300,6 +334,14 @@ exports = Class(Emitter, function () {
 
 	this.onBottomEdit = function () {
 		this.showList(OPTION_BOTTOM_PATH);
+	};
+
+	this.onRightTopEdit = function () {
+		this.showList(OPTION_RIGHT_TOP_PATH);
+	};
+
+	this.onRightBottomEdit = function () {
+		this.showList(OPTION_RIGHT_BOTTOM_PATH);
 	};
 
 	this.onTagsEdit = function () {
@@ -366,6 +408,26 @@ exports = Class(Emitter, function () {
 			var data = adventureMapModel.getData();
 
 			data.grid[this._tileY][this._tileX].bottom = index;
+			this.update();
+		}
+	};
+
+	this.onSelectRightTopPath = function (index) {
+		if (this._tileX !== null) {
+			var adventureMapModel = this._adventureMapModel;
+			var data = adventureMapModel.getData();
+
+			data.grid[this._tileY][this._tileX].rightTop = index;
+			this.update();
+		}
+	};
+
+	this.onSelectRightBottomPath = function (index) {
+		if (this._tileX !== null) {
+			var adventureMapModel = this._adventureMapModel;
+			var data = adventureMapModel.getData();
+
+			data.grid[this._tileY][this._tileX].rightBottom = index;
 			this.update();
 		}
 	};

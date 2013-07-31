@@ -31,7 +31,9 @@ exports = Class(ImageView, function (supr) {
 		this._tileX = tileX;
 		this._tileY = tileY;
 
-		this.setImage(this._tiles[this._map[tileY][tileX]]);
+		if (this._map[tileY] && (this._map[tileY][tileX] !== undefined)) {
+			this.setImage(this._tiles[this._map[tileY][tileX]]);
+		}
 
 		this.style.visible = true;
 	};

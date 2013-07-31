@@ -14,9 +14,15 @@ exports = Class(BottomBar, function (supr) {
 			x: 0,
 			y: 0,
 			width: this.style.width,
-			height: size,
+			height: this.style.height,
 			scrollX: true,
-			scrollY: false
+			scrollY: false,
+			scrollBounds: {
+				minX: 0,
+				maxX: opts.tags.length * 176 + 4,
+				minY: 0,
+				maxY: 0
+			}
 		});
 
 		this._tile = null;
@@ -31,15 +37,15 @@ exports = Class(BottomBar, function (supr) {
 
 		for (var i = 0; i < opts.tags.length; i++) {
 			this._buttons.push(new EditButton({
-				superview: this,
+				superview: scrollView,
 				x: x,
 				y: 4,
-				width: 140,
+				width: 180,
 				height: size - 8,
 				style: 'RED',
 				title: opts.tags[i]
 			}).on('Up', bind(this, 'onTag', i)));
-			x += 136;
+			x += 176;
 		}
 	};
 

@@ -12,8 +12,8 @@ exports = Class(View, function (supr) {
 
 		this.style.clip = true;
 
-		this._tileWidth = opts.tileWidth;
-		this._tileHeight = opts.tileHeight;
+		this._tileWidth = opts.tileSettings.tileWidth;
+		this._tileHeight = opts.tileSettings.tileHeight;
 		this._scrollData = opts.scrollData;
 		this._adventureMapLayers = [];
 		this._inputLayerIndex = opts.inputLayerIndex;
@@ -36,8 +36,6 @@ exports = Class(View, function (supr) {
 				y: opts.y,
 				width: opts.width,
 				height: opts.height,
-				tileWidth: opts.tileWidth,
-				tileHeight: opts.tileHeight,
 				tileCtor: ctors[i],
 				scrollData: opts.scrollData,
 				map: opts.map,
@@ -50,8 +48,8 @@ exports = Class(View, function (supr) {
 		}
 		this._adventureMapLayers[2].on('SelectNode', function(tile) { console.log(tile); });
 
-		this._content.style.width = this._adventureMapLayers[0].calcSizeX(0.5) * opts.tileWidth;
-		this._content.style.height = this._adventureMapLayers[0].calcSizeY(0.5) * opts.tileHeight;
+		this._content.style.width = this._adventureMapLayers[0].calcSizeX(0.5) * opts.tileSettings.tileWidth;
+		this._content.style.height = this._adventureMapLayers[0].calcSizeY(0.5) * opts.tileSettings.tileHeight;
 
 		this._gestureView = this._adventureMapLayers[this._inputLayerIndex];
 		this._gestureView.on('DragSingle', bind(this, 'onDragSingle'));
