@@ -1,4 +1,5 @@
-Back to [adventure map documentation](../readme.md).
+Back to [adventure map documentation](./readme.md).
+
 ### AdventureModel class
 
 The `AdventureModel` class is constructed by the `AdventureMap`, you don't have
@@ -78,7 +79,7 @@ Parameters
  + `id {string}` ---The id of the node.
  + `tag {string}` ---The tag to add to the node.
 
-See: grid settings.
+Also see: [Grid settings documentation](./settings.md).
 
 __removeTagById(id, tag)__
 
@@ -91,4 +92,5 @@ Parameters
  + `id {string}` ---The id of the node.
  + `tag {string}` ---The tag to add to the node.
 
-See: grid settings.
+Also see: [Grid settings documentation](./settings.md).
+
