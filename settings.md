@@ -9,7 +9,7 @@ attach to the nodes.
 
 ### Data structure
 
- + `width {numner}` ---The width of the grid.
+ + `width {number}` ---The width of the grid.
  + `height {number}` ---The height of the grid.
  + `tags {array}` ---A list of tag strings.
 
@@ -29,7 +29,7 @@ var gridSettings = {
 
 The tile settings contain information about the size of the tiles an the images,
 there are two types of images, the background of the tile and the doodads.
-Every tile must have a backround but the doodad is optional.
+Every tile must have a background but the doodad is optional.
 This data structure contains the list of possible images not the actual images
 on the map.
 
@@ -44,7 +44,7 @@ on the map.
   + `height {number}` ---The height of the image or animation.
  + `tileWidth {number}` ---The width of the tiles.
  + `tileHeight {number}` ---The height of the tiles.
- + `defaultTile {number}` ---The default tile with which the map is filled when cleared from the editor, referes to an index in the `tiles` array.
+ + `defaultTile {number}` ---The default tile with which the map is filled when cleared from the editor, refers to an index in the `tiles` array.
 
 ### Tile settings example
 ~~~
@@ -72,12 +72,12 @@ var tileSettings = {
 
 The node settings control how the nodes -which represent levels- are actually displayed.
 There's a list of images for the node and there's a `itemCtors` object, each key can match
-a tag and the value is a view constructor. When the node has the tag the an istance of the
+a tag and the value is a view constructor. When the node has the tag the an instance of the
 view is created and displayed at the node.
 
 ### Data structure
 
- + `nodes {array}` ---A list of objects with node image information whith the following structure:
+ + `nodes {array}` ---A list of objects with node image information with the following structure:
   + `image {string}` ---The path and filename of the image.
   + `width {number}` ---The width of the image.
   + `height {number}` ---The height of the image.
@@ -133,7 +133,7 @@ types of paths: dashed, dotted or line.
 ### Data structure
 
  + `dotDistance {number}` ---The distance between the centers of the dots, only applies to the paths with the type 'dot'.
- + `dathDistance {number}` ---The distance between the centers of the dashes, oly applies to the paths with the type 'dash'.
+ + `dashDistance {number}` ---The distance between the centers of the dashes, only applies to the paths with the type 'dash'.
  + `paths {array}` ---A list of possible paths with the following structure:
   + `type {string}` ---The type of path, possible values are: 'dash', 'dot' or 'line'.
   + `image {string}` ---The path and filename of the node.
