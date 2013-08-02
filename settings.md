@@ -1,5 +1,6 @@
-Back to [adventure map documentation](../readme.md).
-# Adventure map settings
+Back to [adventure map documentation](./readme.md).
+
+# AdventureMap Settings object
 
 ## Grid settings
 
@@ -7,13 +8,13 @@ The grid settings contain the width and height of the grid and the tags.
 This list of tags is only used in the editor to display a list of possible tags to
 attach to the nodes.
 
-### Data structure
+#### Grid settings: Object schema
 
  + `width {numner}` ---The width of the grid.
  + `height {number}` ---The height of the grid.
  + `tags {array}` ---A list of tag strings.
 
-### Grid settings example
+#### Grid settings: Example
 ~~~
 var gridSettings = {
 		width: 20,
@@ -27,31 +28,39 @@ var gridSettings = {
 
 ## Tile settings
 
-The tile settings contain information about the size of the tiles an the images,
-there are two types of images, the background of the tile and the doodads.
-Every tile must have a backround but the doodad is optional.
-This data structure contains the list of possible images not the actual images
-on the map.
+The tile settings contain information about the size of the tiles and the images.
 
-### Data structure
+There are two types of images:
+
++ The background of the tile.
++ And the doodads.
+
+Every tile must have a backround but the doodad is optional.  This data structure contains the entire list of possible images and not just the actual images on the map.
+
+#### Tile settings: Object schema
 
  + `tiles {array}` ---A list of filename strings.
- + `doodads {array}` ---A list of doodad items with the following structure:
-  + `image {string}` ---The image path and filename, used in the editor of if it's not an animation.
-  + `url {string}` ---The path and name of the animation.
-  + `frameRate {number}` ---The frame rate at which the animation is played.
-  + `width {number}` ---The width of the image or animation.
-  + `height {number}` ---The height of the image or animation.
+ + `defaultTile {number}` ---The default tile with which the map is filled when cleared from the editor, referes to an index in the `tiles` array.
  + `tileWidth {number}` ---The width of the tiles.
  + `tileHeight {number}` ---The height of the tiles.
- + `defaultTile {number}` ---The default tile with which the map is filled when cleared from the editor, referes to an index in the `tiles` array.
+ + `doodads {array}` ---A list of doodad items with the following structure:
+ 
+    + `image {string}` ---The image path and filename, used in the editor of if it's not an animation.
+    + `url {string}` ---The path and name of the animation.
+    + `frameRate {number}` ---The frame rate at which the animation is played.
+    + `width {number}` ---The width of the image or animation.
+    + `height {number}` ---The height of the image or animation.
 
-### Tile settings example
+
+#### Tile settings: Example
 ~~~
 var tileSettings = {
 		tiles: [
 			'resources/images/image.png'
 		],
+		defaultTile: 3,
+		tileWidth: 256,
+		tileHeight: 256,
 		doodads: [
 			{
 				image: 'resources/images/bunny/bun_stand_0001.png',
@@ -61,21 +70,18 @@ var tileSettings = {
 				width: 240,
 				height: 520
 			}
-		],
-		tileWidth: 256,
-		tileHeight: 256,
-		defaultTile: 3
+		]
 	};
 ~~~
 
-### Node settings
+## Node settings
 
 The node settings control how the nodes -which represent levels- are actually displayed.
 There's a list of images for the node and there's a `itemCtors` object, each key can match
 a tag and the value is a view constructor. When the node has the tag the an istance of the
 view is created and displayed at the node.
 
-### Data structure
+#### Node settings: Object schema
 
  + `nodes {array}` ---A list of objects with node image information whith the following structure:
   + `image {string}` ---The path and filename of the image.
@@ -86,7 +92,8 @@ view is created and displayed at the node.
    + `data {object}` ---CharacterSettings for the [`scoreView`](http://doc.gameclosure.com/api/ui-text.html#class-ui.scoreview) to display the level id.
  + `itemCtors {object}` ---A list of view constructors, the keys can match tags.
 
-### Node settings example
+#### Node settings: Example
+
 ~~~
 var nodeSettings = {
 		nodes: [
@@ -125,12 +132,12 @@ var nodeSettings = {
 	};
 ~~~
 
-### Path settings
+## Path settings
 
 The path settings define the way the paths are displayed, there are three different
 types of paths: dashed, dotted or line.
 
-### Data structure
+#### Path settings: Object schema
 
  + `dotDistance {number}` ---The distance between the centers of the dots, only applies to the paths with the type 'dot'.
  + `dathDistance {number}` ---The distance between the centers of the dashes, oly applies to the paths with the type 'dash'.
@@ -140,7 +147,8 @@ types of paths: dashed, dotted or line.
   + `width {number}` ---The width of the node.
   + `height {number}` ---The height of the node.
 
-### Path settings example
+#### Path settings: Example
+
 ~~~
 var pathSettings = {
 		dotDistance: 60,
