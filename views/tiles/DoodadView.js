@@ -5,8 +5,8 @@ import ui.SpriteView as SpriteView;
 
 exports = Class(View, function (supr) {
 	this.init = function (opts) {
-		opts.width = opts.tileSettings.tileWidth,
-		opts.height = opts.tileSettings.tileHeight,
+		opts.width = opts.tileSettings.tileWidth;
+		opts.height = opts.tileSettings.tileHeight;
 
 		supr(this, 'init', [opts]);
 
@@ -23,8 +23,6 @@ exports = Class(View, function (supr) {
 
 		this._itemCtors = opts.nodeSettings.itemCtors;
 		this._hideViews = {};
-
-		this.canHandleEvents(false);
 	};
 
 	this.update = function (grid, tileX, tileY) {
@@ -38,6 +36,8 @@ exports = Class(View, function (supr) {
 			if (this._doodadView) {
 				this._doodadView.style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
 				this._doodadView.style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
+				this._doodadView.style.width = doodad.width;
+				this._doodadView.style.height = doodad.height;
 			} else {
 				this._doodadView = new SpriteView({
 					superview: this,
@@ -47,11 +47,12 @@ exports = Class(View, function (supr) {
 					height: doodad.height,
 					url: doodad.url,
 					image: doodad.image,
-					frameRate: doodad.frameRate
+					frameRate: doodad.frameRate,
+					blockEvents: true
 				});
 			}
 
-			doodad.animation && this._doodadView.startAnimation(doodad.animation);
+			doodad.animation && this._doodadView.startAnimation(doodad.animation, {randomFrame: true});
 			this._doodadView.style.visible = true;
 		} else if (this._doodadView) {
 			this._doodadView.style.visible = false;
@@ -106,6 +107,7 @@ exports = Class(View, function (supr) {
 	};
 
 	this.onSelectTag = function (tag, tile, itemView) {
+		console.log(1);
 		this._adventureMapView.emit('ClickTag', tag, tile, itemView);
 	};
 });

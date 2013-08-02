@@ -38,6 +38,8 @@ exports = Class(AdventureMapLayerView, function (supr) {
 
 		this._grid = grid;
 		this._needsPopulate = false;
+
+		this.canHandleEvents(false);
 	};
 
 	this.onUpdate = function (data) {

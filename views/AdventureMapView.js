@@ -69,7 +69,7 @@ exports = Class(ScrollView, function (supr) {
 				nodeSettings: opts.nodeSettings,
 				pathSettings: opts.pathSettings,
 				editMode: opts.editMode,
-				blockEvents: (i !== this._inputLayerIndex)
+				blockEvents: opts.editMode ? (i !== 0) : (i < 2)
 			}));
 		}
 	};
