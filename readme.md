@@ -15,7 +15,7 @@ You can read more detailed information about the settings [here](settings.md).
 ### Tags
 
 A node can be tagged, it's possible to define a view for a tag, when a node has a
-certain tag and the node is visible then the view will be instanciated and shown on
+certain tag and the node is visible then the view will be instantiated and shown on
 the node. This feature allows you to show custom items on the map.
 
 ### AdventureMap class
