@@ -8,18 +8,11 @@ import ..ViewPool;
 
 exports = Class(ImageView, function (supr) {
 	this.init = function (opts) {
-		opts.width = opts.tileSettings.tileWidth;
-		opts.height = opts.tileSettings.tileHeight;
-
 		supr(this, 'init', [opts]);
 
 		this._index = 0;
 		this._pointSize = 24;
 		this._pointDistance = 20;
-
-		this._itemView = null;
-		this._itemRightView = null;
-		this._itemBottomView = null;
 
 		this._tileX = 0;
 		this._tileY = 0;

@@ -9,10 +9,6 @@ import ..ViewPool;
 exports = Class(ImageView, function (supr) {
 	this.init = function (opts) {
 		opts.blockEvents = true;
-		opts.width = opts.tileSettings.tileWidth;
-		opts.height = opts.tileSettings.tileHeight;
-
-		supr(this, 'init', [opts]);
 
 		supr(this, 'init', [opts]);
 
@@ -30,9 +26,6 @@ exports = Class(ImageView, function (supr) {
 		this._dotDistance = opts.pathSettings.dotDistance;
 		this._dashDistance = opts.pathSettings.dashDistance;
 
-		this._tileX = 0;
-		this._tileY = 0;
-
 		this._vec = new Vec2D({x: 1, y: 1});
 	};
 
@@ -43,9 +36,7 @@ exports = Class(ImageView, function (supr) {
 			y: 0,
 			width: 40,
 			height: 40,
-			visible: false,
-			//backgroundColor: 'rgba(255,0,0,0.3)',
-			clip: true
+			visible: false
 		});
 
 		return result;
@@ -104,7 +95,7 @@ exports = Class(ImageView, function (supr) {
 				break;
 
 			case 'dash':
-				var count = (style.width / this._dashDistance) | 0;
+				var count = ((style.width / this._dashDistance) | 0) - 2;
 				if (count > 0) {
 					var step = style.width / count;
 					for (var i = 0; i < count; i++) {
@@ -112,7 +103,7 @@ exports = Class(ImageView, function (supr) {
 						var subviewStyle = subview.style;
 
 						subview.setImage(path.image);
-						subviewStyle.x = i * step + center - path.width * 0.5;
+						subviewStyle.x = i * step - path.width * 0.5;
 						subviewStyle.y = center - path.height * 0.5;
 						subviewStyle.width = path.width;
 						subviewStyle.height = path.height;
@@ -141,9 +132,6 @@ exports = Class(ImageView, function (supr) {
 	};
 
 	this.update = function (grid, tileX, tileY) {
-		this._tileX = tileX;
-		this._tileY = tileY;
-
 		if (this._doAddPath) {
 			this._pathRightView = this._addPath();
 			this._pathBottomView = this._addPath();
@@ -168,13 +156,5 @@ exports = Class(ImageView, function (supr) {
 		tile.rightBottom && this._updatePath(grid, tileX, tileY, tileX + 1, tileY + 1, this._pathRightBottomView, this._paths[tile.rightBottom - 1]);
 
 		this.style.visible = tile.right || tile.bottom || tile.rightTop || tile.rightBottom;
-	};
-
-	this.setTileWidth = function (tileWidth) {
-		this._tileWidth = tileWidth;
-	};
-
-	this.setTileHeight = function (tileHeight) {
-		this._tileHeight = tileHeight;
 	};
 });

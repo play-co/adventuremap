@@ -69,15 +69,31 @@ view is created and displayed at the node.
   + `image {string}` ---The path and filename of the image.
   + `width {number}` ---The width of the image.
   + `height {number}` ---The height of the image.
+  + `characterSettings: {object}` ---Optional, characterSettings for the [`scoreView`](http://doc.gameclosure.com/api/ui-text.html#class-ui.scoreview) to display the level id.
  + `itemCtors {object}` ---A list of view constructors, the keys can match tags.
 
 ### Node settings example
 ~~~
 var nodeSettings = {
 		nodes: [
-			{image: 'resources/images/node/activeRing.png', width: 168, height: 145},
-			{image: 'resources/images/node/blue.png', width: 94, height: 89},
-			{image: 'resources/images/node/dark.png', width: 94, height: 89}
+			{
+				image: 'resources/images/node/activeRing.png',
+				width: 168,
+				height: 145,
+				characterSettings: characterSettings.numbers
+			},
+			{
+				image: 'resources/images/node/blue.png',
+				width: 94,
+				height: 89,
+				characterSettings: characterSettings.numbers
+			},
+			{
+				image: 'resources/images/node/dark.png',
+				width: 94,
+				height: 89,
+				characterSettings: characterSettings.numbers
+			}
 		],
 		itemCtors: {
 			Label: LabelView,

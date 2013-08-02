@@ -3,6 +3,7 @@ import math.geom.Vec2D as Vec2D;
 import ui.View as View;
 import ui.ImageView as ImageView;
 import ui.TextView as TextView;
+import ui.ScoreView as ScoreView;
 
 import ..ViewPool;
 
@@ -29,20 +30,8 @@ exports = Class(ImageView, function (supr) {
 			superview: this
 		});
 
-		if (opts.editMode) {
-			this._idText = new TextView({
-				superview: this._itemView,
-				x: 0,
-				y: 0,
-				fontFamily: 'BPReplay',
-				size: 60,
-				color: '#FFFFFF',
-				strokeColor: '#000000',
-				strokeWidth: 8,
-				text: 'Id',
-				blockEvents: true
-			});
-		}
+		this._idText = null;
+		this._characterSettings = null;
 		this._addItemEmitter = true;
 
 		this._itemCtors = opts.nodeSettings.itemCtors;
@@ -60,7 +49,7 @@ exports = Class(ImageView, function (supr) {
 		this._tileY = tileY;
 
 		var tile = grid[tileY][tileX];
-		if (tile.node) {
+		if (tile && tile.node) {
 			var x = this.style.width * tile.x;
 			var y = this.style.height * tile.y;
 
@@ -74,10 +63,29 @@ exports = Class(ImageView, function (supr) {
 			style.visible = true;
 
 			this._itemView.setImage(node.image);
-			if (this._editMode) {
-				this._idText.style.width = node.width;
-				this._idText.style.height = node.height;
-				this._idText.setText('id' in tile ? tile.id : 'id');
+
+			if (tile.id && node.characterSettings) {
+				if (this._idText) {
+					this._idText.style.width = node.width;
+					this._idText.style.height = node.characterSettings.height || node.height;
+					this._idText.setText(tile.id);
+					if (node.characterSettings !== this._characterSettings) {
+						this._idText.setCharacterData(node.characterSettings.data);
+						this._characterSettings = node.characterSettings.data;
+					}
+				} else {
+					this._idText = new ScoreView({
+						superview: this._itemView,
+						x: 0,
+						y: (node.height - node.characterSettings.height) * 0.5,
+						width: node.width,
+						height: node.characterSettings.height || node.height,
+						text: tile.id,
+						blockEvents: true,
+						characterData: node.characterSettings.data
+					});
+					this._characterSettings = node.characterSettings.data
+				}
 			}
 
 			var itemViews = tile.itemViews;
@@ -130,7 +138,7 @@ exports = Class(ImageView, function (supr) {
 			this._itemView.style.visible = false;
 		}
 
-		if (tile.doodad) {
+		if (tile && tile.doodad) {
 			var doodad = this._doodads[tile.doodad - 1];
 			var style = this._doodadView.style;
 
@@ -144,7 +152,7 @@ exports = Class(ImageView, function (supr) {
 			this._doodadView.style.visible = false;
 		}
 
-		this.style.visible = tile.node || tile.doodad;
+		this.style.visible = true;//tile.node || tile.doodad;
 	};
 
 	this.onSelectNode = function (tile) {

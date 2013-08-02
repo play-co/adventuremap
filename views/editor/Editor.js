@@ -258,7 +258,7 @@ exports = Class(Emitter, function () {
 	this.update = function () {
 		var adventureMapLayers = this._adventureMap.getAdventureMapLayers();
 		for (var i = 0; i < 3; i++) {
-			adventureMapLayers[i].needsPopulate();
+			adventureMapLayers[i].refreshAll();
 		}
 	};
 
@@ -448,13 +448,13 @@ exports = Class(Emitter, function () {
 
 	this.onZoomIn = function () {
 		this._cursorView.style.visible = false;
-		this._scale = this._adventureMap.setScale(this._scale * 1.5);
+		this._scale = this._adventureMap.setScale(this._scale * 1.1);
 		this._zoomView.setScale(this._scale);
 	};
 
 	this.onZoomOut = function () {
 		this._cursorView.style.visible = false;
-		this._scale = this._adventureMap.setScale(this._scale * 0.75);
+		this._scale = this._adventureMap.setScale(this._scale * 0.9);
 		this._zoomView.setScale(this._scale);
 	};
 

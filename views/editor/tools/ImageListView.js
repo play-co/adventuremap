@@ -15,7 +15,7 @@ exports = Class(BottomBar, function (supr) {
 
 		this._images = [];
 		if (opts.canCancel) {
-			this._images.push(new Image({url: 'resources/images/editor/buttonClose.png'}));
+			this._images.push(new Image({url: 'resources/images/ui/buttonClose.png'}));
 		}
 
 		for (var i = 0; i < opts.images.length; i++) {
@@ -37,7 +37,7 @@ exports = Class(BottomBar, function (supr) {
 				width: size - 8,
 				height: size - 8,
 				icon: {
-					image: 'resources/images/editor/buttonBack.png',
+					image: 'resources/images/ui/buttonBack.png',
 					x: (size - 8) * 0.2,
 					y: (size - 8) * 0.18,
 					width: (size - 8) * 0.6,
@@ -53,7 +53,7 @@ exports = Class(BottomBar, function (supr) {
 				width: size - 8,
 				height: size - 8,
 				icon: {
-					image: 'resources/images/editor/buttonNext.png',
+					image: 'resources/images/ui/buttonNext.png',
 					x: (size - 8) * 0.2,
 					y: (size - 8) * 0.18,
 					width: (size - 8) * 0.6,
@@ -95,7 +95,7 @@ exports = Class(BottomBar, function (supr) {
 				y: 8,
 				width: size - 16,
 				height: size - 16,
-				image: 'resources/images/editor/contentBorder.png',
+				image: 'resources/images/ui/contentBorder.png',
 				scaleMethod: '9slice',
 				sourceSlices: menuConstants.BOX_SLICES.SOURCE_SLICES,
 				destSlices: menuConstants.BOX_SLICES.DEST_SLICES

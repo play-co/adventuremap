@@ -16,20 +16,31 @@ exports = Class(Emitter, function (supr) {
 			defaultTile: opts.gridSettings.defaultTile
 		});
 
-		this._scrollData = {
-			x: 0,
-			y: 0,
-			scale: 1
-		};
+		var tileSettings = opts.tileSettings;
+		var gridSettings = opts.gridSettings;
 
-		this._gridSettings = opts.gridSettings;
-		this._tileSettings = opts.tileSettings;
+		this._gridSettings = gridSettings;
+		this._tileSettings = tileSettings;
 		this._pathSettings = opts.pathSettings;
 		this._nodeSettings = opts.nodeSettings;
 
+		if (tileSettings.tiles === 'CREATE_GRID') {
+			tileSettings.tiles = [];
+			for (var y = 0; y < gridSettings.height; y++) {
+				for (var x = 0; x < gridSettings.width; x++) {
+					tileSettings.tiles.push('resources/images/tiles/' + String.fromCharCode(97 + y) + x + '.png');
+				}
+			}
+		}
+
 		opts.map = this._model.getMap();
-		opts.scrollData = this._scrollData;
+
 		this._adventureMapView = new AdventureMapView(opts);
+		this._pinchSet = 0;
+		this._pinchUp = 0;
+		this._pinchReset = 0;
+		this._pinchScale = null;
+		this._dragSingleCount = 0;
 
 		this._adventureMapView.on('Size', bind(this._model, 'onSize'));
 		this._adventureMapView.on('ScrollLeft', bind(this._model, 'onScrollLeft'));
@@ -38,6 +49,10 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.on('ScrollDown', bind(this._model, 'onScrollDown'));
 		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
 		this._adventureMapView.on('ClickNode', bind(this, 'onClickNode'));
+		this._adventureMapView.on('FingerUp', bind(this, 'onFingerUp'));
+		this._adventureMapView.on('ClearMulti', bind(this, 'onClearMulti'));
+		this._adventureMapView.on('PinchEnd', bind(this, 'onPinchEnd'));
+		this._adventureMapView.on('Pinch', bind(this, 'onPinch'));
 
 		this._model.on('NeedsPopulate', bind(this._adventureMapView, 'needsPopulate'));
 		this._model.on('Update', bind(this._adventureMapView, 'onUpdate'));
@@ -60,10 +75,6 @@ exports = Class(Emitter, function (supr) {
 		return this._adventureMapView.getAdventureMapLayers();
 	};
 
-	this.getScrollData = function () {
-		return this._scrollData;
-	};
-
 	this.setScale = function (scale) {
 		if (scale < 0.5) {
 			scale = 0.5;
@@ -77,15 +88,7 @@ exports = Class(Emitter, function (supr) {
 
 	this.load = function (data) {
 		this._model.load(data);
-
-		var modelData = this._model.getData();
-		this._adventureMapView.setTileWidth(modelData.tileWidth);
-		this._adventureMapView.setTileHeight(modelData.tileHeight);
-		this._adventureMapView.onUpdate(modelData);
-	};
-
-	this.refresh = function () {
-		this._adventureMapView.needsPopulate();
+		this._adventureMapView.onUpdate(this._model.getData());
 	};
 
 	this.refreshTile = function (tileX, tileY) {
@@ -98,5 +101,10 @@ exports = Class(Emitter, function (supr) {
 
 	this.onClickNode = function (tile) {
 		this.emit('ClickNode', tile);
+	};
+
+	this.focusNodeById = function (id) {
+		var node = this._model.getNodesById()[id];
+		node && this._adventureMapView.focusNodeById(node);
 	};
 });

@@ -22,7 +22,7 @@ exports = Class(View, function (supr) {
 			y: -35,
 			width: this.style.width + 40,
 			height: this.style.height + 50,
-			image: 'resources/images/editor/background.png',
+			image: 'resources/images/ui/background.png',
 			scaleMethod: '9slice',
 			sourceSlices: menuConstants.BOX_SLICES.SOURCE_SLICES,
 			destSlices: menuConstants.BOX_SLICES.DEST_SLICES
