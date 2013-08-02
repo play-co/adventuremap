@@ -5,24 +5,7 @@ import .tiles.NodeView as NodeView;
 import .AdventureMapLayerView;
 
 exports = Class(AdventureMapLayerView, function (supr) {
-	this.init = function (opts) {
-		supr(this, 'init', [opts])
-
-		this._nodeItemViews = [];
-	};
-
-	this.addNodeItemView = function(nodeItemView) {
-		this._nodeItemViews.push(nodeItemView);
-	};
-
 	this.populateView = function (data) {
-		var nodeItemViews = this._nodeItemViews;
-		var i = nodeItemViews.length;
-
-		while (i) {
-			nodeItemViews[--i].style.visible = false;
-		}
-
 		var grid = data.grid;
 		var width = this._gridSettings.width;
 		var height = this._gridSettings.height;
@@ -61,9 +44,5 @@ exports = Class(AdventureMapLayerView, function (supr) {
 
 	this.onUpdate = function (data) {
 		this._needsPopulate && this.populateView(data);
-	};
-
-	this.refreshTile = function (tileX, tileY) {
-		this._views[tileY][tileX].update(this._grid, tileX, tileY);
 	};
 });

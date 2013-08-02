@@ -41,7 +41,6 @@ exports = Class(Emitter, function () {
 		this._cursorView.on('Update', bind(this, 'update'));
 
 		this._cursorView.
-			on('NeedsPopulate', bind(opts.adventureMap.getAdventureMapView(), 'needsPopulate')).
 			on('InputSelect', bind(this, 'onCursorInputSelect'));
 
 		this._menuBarView = new MenuBarView({
@@ -257,8 +256,9 @@ exports = Class(Emitter, function () {
 
 	this.update = function () {
 		var adventureMapLayers = this._adventureMap.getAdventureMapLayers();
-		for (var i = 0; i < 3; i++) {
-			adventureMapLayers[i].refreshAll();
+		var i = adventureMapLayers.length;
+		while (i) {
+			adventureMapLayers[--i].refreshAll();
 		}
 	};
 
@@ -358,7 +358,7 @@ exports = Class(Emitter, function () {
 	this.onSelectTile = function (index) {
 		if (this._tileX !== null) {
 			this._map[this._tileY][this._tileX] = index;
-			this._adventureMap.getAdventureMapLayers()[0].needsPopulate();
+			this._adventureMap.refreshTile(this._tileX, this._tileY);
 			this.saveMap();
 		}
 	};
@@ -372,7 +372,7 @@ exports = Class(Emitter, function () {
 			var data = adventureMapModel.getData();
 
 			data.grid[this._tileY][this._tileX].doodad = index;
-			this._adventureMap.getAdventureMapLayers()[0].needsPopulate();
+			this._adventureMap.refreshTile(this._tileX, this._tileY);
 			this.saveMap();
 		}
 	};

@@ -33,4 +33,9 @@ exports = Class(View, function (supr) {
 	this.onUpdate = function (data) {
 		this._needsPopulate && this.populateView(data);
 	};
+
+	this.refreshTile = function (tileX, tileY) {
+		var view = this._views[tileY][tileX];
+		view && view.update(this._grid, tileX, tileY);
+	};
 });

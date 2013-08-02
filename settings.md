@@ -36,7 +36,12 @@ on the map.
 ### Data structure
 
  + `tiles {array}` ---A list of filename strings.
- + `doodads {array}` ---A list of filename strings.
+ + `doodads {array}` ---A list of doodad items with the following structure:
+  + `image {string}` ---The image path and filename, used in the editor of if it's not an animation.
+  + `url {string}` ---The path and name of the animation.
+  + `frameRate {number}` ---The frame rate at which the animation is played.
+  + `width {number}` ---The width of the image or animation.
+  + `height {number}` ---The height of the image or animation.
  + `tileWidth {number}` ---The width of the tiles.
  + `tileHeight {number}` ---The height of the tiles.
  + `defaultTile {number}` ---The default tile with which the map is filled when cleared from the editor, referes to an index in the `tiles` array.
@@ -48,7 +53,14 @@ var tileSettings = {
 			'resources/images/image.png'
 		],
 		doodads: [
-			{image: 'resources/images/doodad.png', width: 64, height: 64}
+			{
+				image: 'resources/images/bunny/bun_stand_0001.png',
+				url: 'resources/images/bunny/bun',
+				animation: 'stand',
+				frameRate: 5,
+				width: 240,
+				height: 520
+			}
 		],
 		tileWidth: 256,
 		tileHeight: 256,
@@ -69,7 +81,9 @@ view is created and displayed at the node.
   + `image {string}` ---The path and filename of the image.
   + `width {number}` ---The width of the image.
   + `height {number}` ---The height of the image.
-  + `characterSettings: {object}` ---Optional, characterSettings for the [`scoreView`](http://doc.gameclosure.com/api/ui-text.html#class-ui.scoreview) to display the level id.
+  + `characterSettings: {object}` ---Optional, used to display the id.
+   + `height {number}` ---The height
+   + `data {object}` ---CharacterSettings for the [`scoreView`](http://doc.gameclosure.com/api/ui-text.html#class-ui.scoreview) to display the level id.
  + `itemCtors {object}` ---A list of view constructors, the keys can match tags.
 
 ### Node settings example
@@ -80,19 +94,28 @@ var nodeSettings = {
 				image: 'resources/images/node/activeRing.png',
 				width: 168,
 				height: 145,
-				characterSettings: characterSettings.numbers
+				characterSettings: {
+					height: 60,
+					data: characterSettings.numbers
+				}
 			},
 			{
 				image: 'resources/images/node/blue.png',
 				width: 94,
 				height: 89,
-				characterSettings: characterSettings.numbers
+				characterSettings: {
+					height: 60,
+					data: characterSettings.numbers
+				}
 			},
 			{
 				image: 'resources/images/node/dark.png',
 				width: 94,
 				height: 89,
-				characterSettings: characterSettings.numbers
+				characterSettings: {
+					height: 60,
+					data: characterSettings.numbers
+				}
 			}
 		],
 		itemCtors: {

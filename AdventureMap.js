@@ -76,14 +76,6 @@ exports = Class(Emitter, function (supr) {
 	};
 
 	this.setScale = function (scale) {
-		if (scale < 0.5) {
-			scale = 0.5;
-		} else if (scale > 2) {
-			scale = 2;
-		}
-		this._adventureMapView.setScale(scale);
-
-		return scale;
 	};
 
 	this.load = function (data) {
@@ -95,8 +87,8 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.refreshTile(tileX, tileY);
 	};
 
-	this.onClickTag = function (tag, tile) {
-		this.emit('ClickTag', tag, tile);
+	this.onClickTag = function (tag, tile, view) {
+		this.emit('ClickTag', tag, tile, view);
 	};
 
 	this.onClickNode = function (tile) {

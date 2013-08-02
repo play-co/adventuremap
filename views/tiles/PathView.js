@@ -63,11 +63,11 @@ exports = Class(ImageView, function (supr) {
 
 		style.x = a1;
 		style.y = b1;
-		style.width = vec.getMagnitude() + center * 2 - 110;
+		style.width = vec.getMagnitude() + center * 2;
 		style.height = path.height;
-		style.offsetX = -55;//-center; todo: setting
+		style.offsetX = -center;
 		style.offsetY = -center;
-		style.anchorX = 55;//center; todo: setting
+		style.anchorX = center;
 		style.anchorY = center;
 		style.r = vec.getAngle();
 
@@ -76,15 +76,15 @@ exports = Class(ImageView, function (supr) {
 
 		switch (path.type) {
 			case 'dot':
-				var count = (style.width / this._dotDistance) | 0;
+				var count = (((style.width - center * 2) / this._dotDistance) | 0) - 2;
 				if (count > 0) {
-					var step = style.width / count;
+					var step = (style.width - center * 2) / count;
 					for (var i = 0; i < count; i++) {
 						var subview = (i < subviews.length) ? subviews[i] : new ImageView({superview: view});
 						var subviewStyle = subview.style;
 
 						subview.setImage(path.image);
-						subviewStyle.x = i * step + center - path.width * 0.5;
+						subviewStyle.x = i * step;
 						subviewStyle.y = center - path.height * 0.5;
 						subviewStyle.width = path.width;
 						subviewStyle.height = path.height;
@@ -103,7 +103,7 @@ exports = Class(ImageView, function (supr) {
 						var subviewStyle = subview.style;
 
 						subview.setImage(path.image);
-						subviewStyle.x = i * step - path.width * 0.5;
+						subviewStyle.x = i * step;
 						subviewStyle.y = center - path.height * 0.5;
 						subviewStyle.width = path.width;
 						subviewStyle.height = path.height;
@@ -120,7 +120,7 @@ exports = Class(ImageView, function (supr) {
 				subview.setImage(path.image);
 				subviewStyle.x = 0;
 				subviewStyle.y = 0;
-				subviewStyle.width = style.width - 90; // todo: settings
+				subviewStyle.width = style.width;
 				subviewStyle.height = style.height;
 				subviewStyle.visible = true;
 				break;

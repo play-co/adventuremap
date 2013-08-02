@@ -89,13 +89,14 @@ Parameters
 
 #### Events
 
-__'ClickTag', callback(tag, tile)__
+__'ClickTag', callback(tag, tile, view)__
 
 Called when a tag on a tile is clicked.
 
 Parameters
  + `tag {string}` ---The tag which is clicked.
  + `tile {object}` ---The tile on which the tag is placed, contains a `tileX` and `tileY` property.
+ + `view {View}` ---The tag view.
 
 __'ClickNode', callback(tile)__
 

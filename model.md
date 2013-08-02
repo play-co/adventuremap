@@ -7,6 +7,25 @@ to instanciate it yourself.
 There are a number of public functions which are mainly for internal use,
 the functions listed here are useful to extend the functionallity of the map.
 
+#### Tile data structure
+
+ + `node {number}` ---The node image, 0 is no image.
+ + `right {number}` ---The right path image, 0 is no image.
+ + `bottom {number}` ---The bottom path image, 0 is no image.
+ + `rightTop {number}` ---The right top path image, 0 is no image.
+ + `rightBottom {number}` ---The right bottom path image, 0 is no image.
+ + `x {number}` ---The positon within the tile in the range of 0..1.
+ + `y {number}` ---The positon within the tile in the range of 0..1.
+ + `title {string}` ---Optional, can be used for labels.
+ + `text {string}` ---Optional, can be used for labels.
+ + `tags {object}` ---The tags attached to this node.
+
+If the `node` is set then the image information in the `nodeSettings.nodes` list is used,
+the index is the `node` value minus one.
+
+If `right`, `bottom`, `rightBottom` or `rightTop` is set then the image information in the 
+`pathSettings.paths` list is used, the index is the given value minus one.
+
 #### Methods
 
 __getGrid(tileX, tileY)__

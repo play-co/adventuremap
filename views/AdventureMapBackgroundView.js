@@ -29,7 +29,7 @@ exports = Class(AdventureMapLayerView, function (supr) {
 		var height = this._gridSettings.height;
 		var tileWidth = this._tileSettings.tileWidth;
 		var tileHeight = this._tileSettings.tileHeight
-		var margin = this._editMode ? 5 : 0;
+		var margin = this._editMode ? 8 : 0;
 
 		for (var y = 0; y < height; y++) {
 			var line = [];
@@ -65,7 +65,6 @@ exports = Class(AdventureMapLayerView, function (supr) {
 	};
 
 	this.refreshTile = function (tileX, tileY) {
-		console.log('(3)', tileX, tileY);		
 		this._views[tileY][tileX].setImage(this._tiles[this._map[tileY][tileX]]);
 	};
 });

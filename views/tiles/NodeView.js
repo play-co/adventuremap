@@ -88,48 +88,6 @@ exports = Class(ImageView, function (supr) {
 				}
 			}
 
-			var itemViews = tile.itemViews;
-			if (!itemViews) {
-				itemViews = {};
-				tile.itemViews = itemViews;
-			}
-			var hideViews = this._hideViews;
-			for (var tag in itemViews) {
-				var itemView = itemViews[tag];
-				if (itemView.style.visible) {
-					hideViews[tag] = itemView;
-				}
-			}
-
-			var tags = tile.tags;
-			for (var tag in tags) {
-				if (this._itemCtors[tag]) {
-					var itemView = itemViews[tag];
-					if (!itemView) {
-						itemView = new this._itemCtors[tag]({
-							superview: this._superview,
-							adventureMapView: this._adventureMapView,
-							zIndex: 999999999,
-							tag: tag,
-							tile: tile
-						});
-						itemViews[tag] = itemView;
-						this._superview.addNodeItemView(itemView);
-					}
-					itemView.style.x = this.style.x + x - itemView.style.width * 0.5 + (itemView.offsetX || 0);
-					itemView.style.y = this.style.y + y - itemView.style.height * 0.5 + (itemView.offsetY || 0);
-					itemView.update && itemView.update(tile);
-
-					hideViews[tag] = null;
-				}
-			}
-
-			for (var tag in hideViews) {
-				if (hideViews[tag]) {
-					hideViews[tag].style.visible = false;
-				}
-			}
-
 			if (this._addItemEmitter) {
 				this._addItemEmitter = false;
 				this._itemView.on('InputSelect', bind(this, 'onSelectNode', tile));
@@ -152,7 +110,7 @@ exports = Class(ImageView, function (supr) {
 			this._doodadView.style.visible = false;
 		}
 
-		this.style.visible = true;//tile.node || tile.doodad;
+		this.style.visible = tile.node;
 	};
 
 	this.onSelectNode = function (tile) {
