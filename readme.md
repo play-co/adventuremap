@@ -1,22 +1,19 @@
-# Adventure map engine
+# Adventure Map Engine
 
 The Adventure map class is used to display an overview of all levels in the game.
-The levels are displayed as nodes on a tiled background, they can be connected with paths.
+The levels are displayed as nodes on a tiled background.  The nodes can be connected with lines to form paths for players to follow through the map.
 
 The map contains a model, your can [read about the model here](model.md).
 
-## Configuration
+### Node Tags
 
-The map can be configured with settings objects, there are settings for the background, 
-the nodes, items and tags.
+A node can be tagged.  It's possible to define a view for a tag.  When a node has a certain tag and the node is visible, then the view will be instanciated and will be shown on the node.  This feature allows you to show custom items on the map at tagged nodes.
+
+## Settings objects
+
+The map can be configured with settings objects.  There are settings for the background, nodes, items and tags.
 
 You can read more detailed information about the settings [here](settings.md).
-
-### Tags
-
-A node can be tagged, it's possible to define a view for a tag, when a node has a
-certain tag and the node is visible then the view will be instanciated and shown on
-the node. This feature allows you to show custom items on the map.
 
 ### AdventureMap class
 
@@ -24,10 +21,10 @@ The `AdventureMap` class wraps the adventure map model and view class instances.
 
 Parameters
  + `superview {View}` ---The view which contains the adventure map view.
- + `editMode {boolean}` ---If `true` then the node id will be displayed on the tiles.
+ + `editMode {boolean}` ---If `true` then the node id will be displayed on the tiles to aid in map editing.
  + `gridSettings {object}` ---General grid settings like width and height.
  + `tileSettings {object}` ---Settings for the tiles: images, tileWidth and tileHeight, etc.
- + `pathSettings {object}` ---Options for how the path will be displayed: dotted, dashed, ett. 
+ + `pathSettings {object}` ---Options for how the path will be displayed: dotted, dashed, etc.
  + `nodeSettings {object}` ---Display options for the nodes on the map.
  + `inputLayerIndex {number}` ---Which layer will handle inputs.
 

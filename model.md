@@ -1,11 +1,12 @@
-Back to [adventure map documentation](../readme.md).
+Back to [adventure map documentation](./readme.md).
+
 ### AdventureModel class
 
 The `AdventureModel` class is constructed by the `AdventureMap`, you don't have
-to instanciate it yourself. 
+to instantiate it yourself. 
 
 There are a number of public functions which are mainly for internal use,
-the functions listed here are useful to extend the functionallity of the map.
+the functions listed here are useful to extend the functionality of the map.
 
 #### Tile data structure
 
@@ -14,8 +15,8 @@ the functions listed here are useful to extend the functionallity of the map.
  + `bottom {number}` ---The bottom path image, 0 is no image.
  + `rightTop {number}` ---The right top path image, 0 is no image.
  + `rightBottom {number}` ---The right bottom path image, 0 is no image.
- + `x {number}` ---The positon within the tile in the range of 0..1.
- + `y {number}` ---The positon within the tile in the range of 0..1.
+ + `x {number}` ---The position within the tile in the range of 0..1.
+ + `y {number}` ---The position within the tile in the range of 0..1.
  + `title {string}` ---Optional, can be used for labels.
  + `text {string}` ---Optional, can be used for labels.
  + `tags {object}` ---The tags attached to this node.
@@ -72,23 +73,24 @@ __addTagById(id, tag)__
 Add a tag to the node with the given id.
 When the tag is added and the node is visible then the update function
 is called, if there's a view attached to the tag then that view shows up
-immidiately.
+immediately.
 
 Parameters
  + `id {string}` ---The id of the node.
  + `tag {string}` ---The tag to add to the node.
 
-See: grid settings.
+Also see: [Grid settings documentation](./settings.md).
 
 __removeTagById(id, tag)__
 
 Remove a tag from the node with the given id.
 When the tag is remove and the node is visible then the update function
 is called, if there's a view attached to the tag then that view is hidden
-immidiately.
+immediately.
 
 Parameters
  + `id {string}` ---The id of the node.
  + `tag {string}` ---The tag to add to the node.
 
-See: grid settings.
+Also see: [Grid settings documentation](./settings.md).
+
