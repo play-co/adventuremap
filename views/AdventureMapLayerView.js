@@ -4,6 +4,7 @@ exports = Class(View, function (supr) {
 	this.init = function (opts) {
 		supr(this, 'init', [opts]);
 
+		this._grid = null;
 		this._adventureMapView = opts.adventureMapView;
 		this._editMode = opts.editMode;
 		this._gridSettings = opts.gridSettings;

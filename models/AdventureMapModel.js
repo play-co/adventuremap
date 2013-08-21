@@ -182,6 +182,33 @@ exports = Class(Emitter, function (supr) {
 		}
 	};
 
+	this.removeTag = function (tag) {
+		if (typeof tag === 'Object') {
+			var tags = tag;
+			for (var id in this._nodesById) {
+				var tile = this._nodesById[id];
+				if (tile.tags) {
+					var found = false;
+					for (tag in tile.tags) {
+						if (tags[tag]) {
+							delete tile.tags[tag];
+							found = true;
+						}
+					}
+					found && this.emit('UpdateTile', tile.tileX, tile.tileY);
+				}
+			}
+		} else {
+			for (var id in this._nodesById) {
+				var tile = this._nodesById[id];
+				if (tile.tags && tile.tags[tag]) {
+					delete tile.tags[tag];
+					this.emit('UpdateTile', tile.tileX, tile.tileY);
+				}
+			}
+		}
+	};
+
 	this.onSize = function (sizeX, sizeY) {
 		this._maxX = this._data.width - sizeX;
 		this._maxY = this._data.height - sizeY;
