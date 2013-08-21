@@ -45,4 +45,17 @@ exports = Class(AdventureMapLayerView, function (supr) {
 	this.onUpdate = function (data) {
 		this._needsPopulate && this.populateView(data);
 	};
+
+	this.removeItemViews = function () {
+		var views = this._views;
+		var width = this._gridSettings.width;
+		var height = this._gridSettings.height;
+
+		for (var y = 0; y < height; y++) {
+			for (var x = 0; x < width; x++) {
+				var view = views[y][x];
+				view && view.removeItemViews();
+			}
+		}
+	};
 });
