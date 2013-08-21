@@ -94,3 +94,9 @@ Parameters
 
 Also see: [Grid settings documentation](./settings.md).
 
+__removeTag(tag)__
+
+Check all nodes and remove the given tag or tags.
+
+Parameters
+ + `tag {string|object}` ---If string then remove matching tags, if an object then remove the tags which match the keys of the object.

@@ -23,6 +23,7 @@ exports = Class(View, function (supr) {
 
 		this._itemCtors = opts.nodeSettings.itemCtors;
 		this._hideViews = {};
+		this._itemViews = null;
 	};
 
 	this.update = function (grid, tileX, tileY) {
@@ -66,6 +67,8 @@ exports = Class(View, function (supr) {
 			itemViews = {};
 			tile.itemViews = itemViews;
 		}
+		this._itemViews = itemViews;
+
 		var hideViews = this._hideViews;
 		for (var tag in itemViews) {
 			var itemView = itemViews[tag];
@@ -106,8 +109,18 @@ exports = Class(View, function (supr) {
 		this.style.visible = tile.doodad;
 	};
 
+	this.removeItemViews = function () {
+		var itemViews = this._itemViews;
+		if (itemViews) {
+			for (var tag in itemViews) {
+				itemViews[tag].removeFromSuperview();
+				delete itemViews[tag];
+			}
+		}
+		this._hideViews = {};
+	};
+
 	this.onSelectTag = function (tag, tile, itemView) {
-		console.log(1);
 		this._adventureMapView.emit('ClickTag', tag, tile, itemView);
 	};
 });

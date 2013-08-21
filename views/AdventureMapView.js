@@ -113,4 +113,8 @@ exports = Class(ScrollView, function (supr) {
 
 		this.scrollTo(x, y, 300);
 	};
+
+	this.removeItemViews = function () {
+		this._adventureMapLayers[3].removeItemViews();
+	};
 });
