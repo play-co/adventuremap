@@ -94,7 +94,7 @@ exports = Class(ScrollView, function (supr) {
 			maxX: this._totalWidth * scale,
 			maxY: this._totalHeight * scale
 		});
-		this.scrollTo(offsetX, offsetY, 0);
+		this.scrollTo(this.style.x * scale, this.style.y * scale, 0);
 	};
 
 	this.refreshTile = function (tileX, tileY) {
