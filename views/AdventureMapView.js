@@ -47,6 +47,13 @@ exports = Class(ScrollView, function (supr) {
 			scale: scale
 		});
 
+		this._pinchEndTimeout = null;
+		this._pinch = false;
+
+		this._content.on('FingerUp', bind(this, 'onFingerUp'));
+		this._content.on('ClearMulti', bind(this, 'onClearMulti'));
+		this._content.on('Pinch', bind(this, 'onPinch'));
+
 		var ctors = [
 				AdventureMapBackgroundView,
 				AdventureMapPathsView,
@@ -81,12 +88,60 @@ exports = Class(ScrollView, function (supr) {
 		}
 	};
 
+	this.onFingerUp = function (activeFingers) {
+		activeFingers || this.onClearMulti();
+	};
+
+	this.onClearMulti = function () {
+		this._pinchEndTimeout && clearTimeout(this._pinchEndTimeout);
+		this._pinchEndTimeout = setTimeout(
+			bind(this, function () {
+				this._pinch = false;
+			}),
+			10
+		);
+	};
+
+	this.onPinch = function (pinchScale) {
+		this._pinch = true;
+
+		this.setScale(pinchScale);
+	};
+
+	this.onDrag = function (dragEvt, moveEvt, delta) {
+		this._pinch || supr(this, 'onDrag', arguments);
+	};
+
+	this.onDragStop = function (dragEvt, selectEvt) {
+		this._pinch || supr(this, 'onDragStop', arguments);
+	};
+
 	this.getAdventureMapLayers = function () {
 		return this._adventureMapLayers;
 	};
 
+	this.getTileWidth = function () {
+		return this._tileWidth;
+	};
+
+	this.getTileHeight = function () {
+		return this._tileHeight;
+	};
+
+	this.getScale = function (scale) {
+		return this._content.style.scale;
+	};
+
 	this.setScale = function (scale) {
+		var lastScale = this._content.style.scale;
+
 		this._content.style.scale = scale;
+
+		var x = this._contentView.style.x * scale / lastScale + (lastScale - scale) * this.style.width * 0.5;
+		var y = this._contentView.style.y * scale / lastScale + (lastScale - scale) * this.style.height * 0.5;
+
+		this._contentView.style.x = Math.min(Math.max(x, -(this._totalWidth * scale - this.style.width)), 0);
+		this._contentView.style.y = Math.min(Math.max(y, -(this._totalHeight * scale - this.style.height)), 0);
 
 		this.setScrollBounds({
 			minX: 0,
@@ -94,7 +149,6 @@ exports = Class(ScrollView, function (supr) {
 			maxX: this._totalWidth * scale,
 			maxY: this._totalHeight * scale
 		});
-		this.scrollTo(offsetX, offsetY, 0);
 	};
 
 	this.refreshTile = function (tileX, tileY) {
