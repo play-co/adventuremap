@@ -49,10 +49,6 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.on('ScrollDown', bind(this._model, 'onScrollDown'));
 		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
 		this._adventureMapView.on('ClickNode', bind(this, 'onClickNode'));
-		this._adventureMapView.on('FingerUp', bind(this, 'onFingerUp'));
-		this._adventureMapView.on('ClearMulti', bind(this, 'onClearMulti'));
-		this._adventureMapView.on('PinchEnd', bind(this, 'onPinchEnd'));
-		this._adventureMapView.on('Pinch', bind(this, 'onPinch'));
 
 		this._model.on('NeedsPopulate', bind(this._adventureMapView, 'needsPopulate'));
 		this._model.on('Update', bind(this._adventureMapView, 'onUpdate'));
@@ -76,6 +72,7 @@ exports = Class(Emitter, function (supr) {
 	};
 
 	this.setScale = function (scale) {
+		this._adventureMapView.setScale(scale);
 	};
 
 	this.load = function (data) {
