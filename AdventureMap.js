@@ -43,10 +43,6 @@ exports = Class(Emitter, function (supr) {
 		this._dragSingleCount = 0;
 
 		this._adventureMapView.on('Size', bind(this._model, 'onSize'));
-		this._adventureMapView.on('ScrollLeft', bind(this._model, 'onScrollLeft'));
-		this._adventureMapView.on('ScrollRight', bind(this._model, 'onScrollRight'));
-		this._adventureMapView.on('ScrollUp', bind(this._model, 'onScrollUp'));
-		this._adventureMapView.on('ScrollDown', bind(this._model, 'onScrollDown'));
 		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
 		this._adventureMapView.on('ClickNode', bind(this, 'onClickNode'));
 

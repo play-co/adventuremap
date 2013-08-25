@@ -28,12 +28,16 @@ exports = Class(ScrollView, function (supr) {
 					maxX: this._totalWidth * scale,
 					maxY: this._totalHeight * scale
 				},
-				bounce: false
+				bounce: false,
+				minScale: 0.5,
+				maxScale: 2
 			}
 		);
 
 		supr(this, 'init', [opts]);
 
+		this._minScale = opts.minScale;
+		this._maxScale = opts.maxScale;
 		this._tileSettings = opts.tileSettings;
 		this._adventureMapLayers = [];
 		this._inputLayerIndex = opts.inputLayerIndex;
@@ -78,6 +82,12 @@ exports = Class(ScrollView, function (supr) {
 				editMode: opts.editMode,
 				blockEvents: opts.editMode ? (i !== 0) : (i < 2)
 			}));
+		}
+	};
+
+	this.setOffset = function (x, y) {
+		if (Object.keys(this._touch).length <= 1) {
+			supr(this, 'setOffset', arguments);
 		}
 	};
 
@@ -134,6 +144,7 @@ exports = Class(ScrollView, function (supr) {
 
 	this.setScale = function (scale) {
 		var lastScale = this._content.style.scale;
+		scale = Math.min(Math.max(scale, this._minScale), this._maxScale);
 
 		this._content.style.scale = scale;
 
