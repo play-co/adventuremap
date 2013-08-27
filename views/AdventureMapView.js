@@ -42,6 +42,8 @@ exports = Class(ScrollView, function (supr) {
 		this._adventureMapLayers = [];
 		this._inputLayerIndex = opts.inputLayerIndex;
 
+		this._showTimeout = null;
+
 		this._content = new GestureView({
 			superview: this,
 			x: 0,
@@ -86,7 +88,7 @@ exports = Class(ScrollView, function (supr) {
 	};
 
 	this.setOffset = function (x, y) {
-		if (Object.keys(this._touch).length <= 1) {
+		if (!this._touch || Object.keys(this._touch).length <= 1) {
 			supr(this, 'setOffset', arguments);
 		}
 	};
@@ -94,8 +96,18 @@ exports = Class(ScrollView, function (supr) {
 	this.onUpdate = function (data) {
 		for (var i = 0; i < 4; i++) {
 			var adventureMapLayer = this._adventureMapLayers[i];
-			adventureMapLayer && adventureMapLayer.onUpdate && adventureMapLayer.onUpdate(data);
+			if (adventureMapLayer && adventureMapLayer.onUpdate) {
+				adventureMapLayer.onUpdate(data);
+			}
 		}
+		this._showTimeout = this._showTimeout || setTimeout(
+			bind(this, function () {
+				for (var i = 0; i < 4; i++) {
+					this._adventureMapLayers[i].style.visible = true;
+				}
+			}),
+			0
+		);
 	};
 
 	this.onFingerUp = function (activeFingers) {
