@@ -1,6 +1,5 @@
 import ui.View as View;
 import ui.ScrollView as ScrollView;
-import ui.GestureView as GestureView;
 
 import .AdventureMapBackgroundView;
 import .AdventureMapPathsView;
@@ -44,7 +43,10 @@ exports = Class(ScrollView, function (supr) {
 
 		this._showTimeout = null;
 
-		this._content = new GestureView({
+		this._fingerOne = null;
+		this._fingerTwo = null;
+
+		this._content = new View({
 			superview: this,
 			x: 0,
 			y: 0,
@@ -53,12 +55,10 @@ exports = Class(ScrollView, function (supr) {
 			scale: scale
 		});
 
-		this._pinchEndTimeout = null;
 		this._pinch = false;
-
-		this._content.on('FingerUp', bind(this, 'onFingerUp'));
-		this._content.on('ClearMulti', bind(this, 'onClearMulti'));
-		this._content.on('Pinch', bind(this, 'onPinch'));
+		this._pinchScale = 1;
+		this._pinchPoints = {};
+		this._pinchStartDistance = 0;
 
 		var ctors = [
 				AdventureMapBackgroundView,
@@ -87,12 +87,6 @@ exports = Class(ScrollView, function (supr) {
 		}
 	};
 
-	this.setOffset = function (x, y) {
-		if (!this._touch || Object.keys(this._touch).length <= 1) {
-			supr(this, 'setOffset', arguments);
-		}
-	};
-
 	this.onUpdate = function (data) {
 		for (var i = 0; i < 4; i++) {
 			var adventureMapLayer = this._adventureMapLayers[i];
@@ -110,32 +104,58 @@ exports = Class(ScrollView, function (supr) {
 		);
 	};
 
-	this.onFingerUp = function (activeFingers) {
-		activeFingers || this.onClearMulti();
-	};
-
-	this.onClearMulti = function () {
-		this._pinchEndTimeout && clearTimeout(this._pinchEndTimeout);
-		this._pinchEndTimeout = setTimeout(
-			bind(this, function () {
-				this._pinch = false;
-			}),
-			10
-		);
-	};
-
 	this.onPinch = function (pinchScale) {
-		this._pinch = true;
-
 		this.setScale(pinchScale);
 	};
 
+	this.onInputStart = function (evt, pt) {
+		supr(this, 'onInputStart', arguments);
+		switch (this._touchIDs.length) {
+			case 1:
+				this._fingerOne = this._touchIDs[0];
+				this._pinchPoints[this._fingerOne] = {x: evt.srcPoint.x, y: evt.srcPoint.y};
+				break;
+			case 2:
+				this._fingerTwo = this._touchIDs[1];
+				this._pinchPoints[this._fingerTwo] = {x: evt.srcPoint.x, y: evt.srcPoint.y};
+				break;
+		}
+		if (this._touchIDs.length === 2) {
+			this._pinchScale = this.getScale();
+			this._pinchStartDistance = this.getPinchDistance();
+			this._pinch = true;
+		} else {
+			this._pinch = false;
+		}
+	};
+
 	this.onDrag = function (dragEvt, moveEvt, delta) {
-		this._pinch || supr(this, 'onDrag', arguments);
+		if (this._pinch) {
+			this._pinchPoints['_' + moveEvt.id] = {x: moveEvt.srcPoint.x, y: moveEvt.srcPoint.y};
+			this.setScale(this.getPinchDistance() / this._pinchStartDistance * this._pinchScale);
+		} else {
+			supr(this, 'onDrag', arguments);
+		}
 	};
 
 	this.onDragStop = function (dragEvt, selectEvt) {
-		this._pinch || supr(this, 'onDragStop', arguments);
+		if (this._pinch) {
+			if ('id' in dragEvt) {
+				delete this._touch['_' + dragEvt.id];
+				this._touchIDs = Object.keys(this._touch);
+			}
+			if ('id' in selectEvt) {
+				delete this._touch['_' + selectEvt.id];
+				this._touchIDs = Object.keys(this._touch);
+			}
+
+		} else {
+			supr(this, 'onDragStop', arguments);
+		}
+	};
+
+	this.setOffset = function (x, y) {
+		(this._touchIDs.length <= 1) && supr(this, 'setOffset', arguments);
 	};
 
 	this.getAdventureMapLayers = function () {
@@ -172,6 +192,14 @@ exports = Class(ScrollView, function (supr) {
 			maxX: this._totalWidth * scale,
 			maxY: this._totalHeight * scale
 		});
+	};
+
+	this.getPinchDistance = function () {
+		var p1 = this._pinchPoints[this._fingerOne];
+		var p2 = this._pinchPoints[this._fingerTwo];
+		var dx = p2.x - p1.x;
+		var dy = p2.y - p1.y;
+		return Math.sqrt(dx * dx + dy * dy);
 	};
 
 	this.refreshTile = function (tileX, tileY) {

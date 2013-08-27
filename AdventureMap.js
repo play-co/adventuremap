@@ -76,6 +76,14 @@ exports = Class(Emitter, function (supr) {
 		this._adventureMapView.onUpdate(this._model.getData());
 	};
 
+	this.hide = function () {
+		this._adventureMapView.hide();
+	};
+
+	this.show = function () {
+		this._adventureMapView.show();
+	};
+
 	this.refreshTile = function (tileX, tileY) {
 		this._adventureMapView.refreshTile(tileX, tileY);
 	};
