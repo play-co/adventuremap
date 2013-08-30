@@ -40,8 +40,4 @@ exports = Class(AdventureMapLayerView, function (supr) {
 		this._grid = grid;
 		this._needsPopulate = false;
 	};
-
-	this.onUpdate = function (data) {
-		this._needsPopulate && this.populateView(data);
-	};
 });
