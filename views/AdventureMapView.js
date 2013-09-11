@@ -1,6 +1,5 @@
 import ui.View as View;
 import ui.ScrollView as ScrollView;
-import ui.GestureView as GestureView;
 
 import .AdventureMapBackgroundView;
 import .AdventureMapPathsView;
@@ -28,12 +27,16 @@ exports = Class(ScrollView, function (supr) {
 					maxX: this._totalWidth * scale,
 					maxY: this._totalHeight * scale
 				},
-				bounce: false
+				bounce: false,
+				minScale: 0.5,
+				maxScale: 2
 			}
 		);
 
 		supr(this, 'init', [opts]);
 
+		this._minScale = opts.minScale;
+		this._maxScale = opts.maxScale;
 		this._tileSettings = opts.tileSettings;
 		this._adventureMapLayers = [];
 		this._inputLayerIndex = opts.inputLayerIndex;
@@ -53,6 +56,11 @@ exports = Class(ScrollView, function (supr) {
 			height: this._totalHeight,
 			scale: scale
 		});
+
+		this._pinch = false;
+		this._pinchScale = 1;
+		this._pinchPoints = {};
+		this._pinchStartDistance = 0;
 
 		var ctors = [
 				AdventureMapBackgroundView,
@@ -84,7 +92,9 @@ exports = Class(ScrollView, function (supr) {
 	this.onUpdate = function (data) {
 		for (var i = 0; i < 4; i++) {
 			var adventureMapLayer = this._adventureMapLayers[i];
-			adventureMapLayer && adventureMapLayer.onUpdate && adventureMapLayer.onUpdate(data);
+			if (adventureMapLayer && adventureMapLayer.onUpdate) {
+				adventureMapLayer.onUpdate(data);
+			}
 		}
 
 		this._showTimeout = this._showTimeout || setTimeout(
@@ -124,6 +134,7 @@ exports = Class(ScrollView, function (supr) {
 
 	this.onDrag = function (dragEvt, moveEvt, delta) {
 		this.emit('Dragged');
+
 		if (this._pinch) {
 			this._pinchPoints['_' + moveEvt.id] = {x: moveEvt.srcPoint.x, y: moveEvt.srcPoint.y};
 			this.setScale(this.getPinchDistance() / this._pinchStartDistance * this._pinchScale);
@@ -156,8 +167,29 @@ exports = Class(ScrollView, function (supr) {
 		return this._adventureMapLayers;
 	};
 
+	this.getTileWidth = function () {
+		return this._tileWidth;
+	};
+
+	this.getTileHeight = function () {
+		return this._tileHeight;
+	};
+
+	this.getScale = function (scale) {
+		return this._content.style.scale;
+	};
+
 	this.setScale = function (scale) {
+		var lastScale = this._content.style.scale;
+		scale = Math.min(Math.max(scale, this._minScale), this._maxScale);
+
 		this._content.style.scale = scale;
+
+		var x = this._contentView.style.x * scale / lastScale + (lastScale - scale) * this.style.width * 0.5;
+		var y = this._contentView.style.y * scale / lastScale + (lastScale - scale) * this.style.height * 0.5;
+
+		this._contentView.style.x = Math.min(Math.max(x, -(this._totalWidth * scale - this.style.width)), 0);
+		this._contentView.style.y = Math.min(Math.max(y, -(this._totalHeight * scale - this.style.height)), 0);
 
 		this.setScrollBounds({
 			minX: 0,
@@ -165,7 +197,14 @@ exports = Class(ScrollView, function (supr) {
 			maxX: this._totalWidth * scale,
 			maxY: this._totalHeight * scale
 		});
-		this.scrollTo(this.style.x * scale, this.style.y * scale, 0);
+	};
+
+	this.getPinchDistance = function () {
+		var p1 = this._pinchPoints[this._fingerOne];
+		var p2 = this._pinchPoints[this._fingerTwo];
+		var dx = p2.x - p1.x;
+		var dy = p2.y - p1.y;
+		return Math.sqrt(dx * dx + dy * dy);
 	};
 
 	this.refreshTile = function (tileX, tileY) {

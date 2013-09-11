@@ -45,10 +45,6 @@ exports = Class(Emitter, function (supr) {
 
 		this._adventureMapView.on('Dragged', bind(this, 'emit', 'Dragged'));
 		this._adventureMapView.on('Size', bind(this._model, 'onSize'));
-		this._adventureMapView.on('ScrollLeft', bind(this._model, 'onScrollLeft'));
-		this._adventureMapView.on('ScrollRight', bind(this._model, 'onScrollRight'));
-		this._adventureMapView.on('ScrollUp', bind(this._model, 'onScrollUp'));
-		this._adventureMapView.on('ScrollDown', bind(this._model, 'onScrollDown'));
 		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
 		this._adventureMapView.on('ClickNode', bind(this, 'onClickNode'));
 
@@ -80,6 +76,14 @@ exports = Class(Emitter, function (supr) {
 	this.load = function (data) {
 		this._model.load(data);
 		this._adventureMapView.onUpdate(this._model.getData());
+	};
+
+	this.hide = function () {
+		this._adventureMapView.hide();
+	};
+
+	this.show = function () {
+		this._adventureMapView.show();
 	};
 
 	this.refreshTile = function (tileX, tileY) {

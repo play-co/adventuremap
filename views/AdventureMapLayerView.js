@@ -14,6 +14,8 @@ exports = Class(View, function (supr) {
 		this._map = opts.map;
 		this._views = [];
 		this._needsPopulate = true;
+
+		this.style.visible = false;
 	};
 
 	this.refreshAll = function () {

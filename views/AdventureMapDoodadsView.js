@@ -42,10 +42,6 @@ exports = Class(AdventureMapLayerView, function (supr) {
 		this.canHandleEvents(false);
 	};
 
-	this.onUpdate = function (data) {
-		this._needsPopulate && this.populateView(data);
-	};
-
 	this.removeItemViews = function () {
 		var views = this._views;
 		var width = this._gridSettings.width;
