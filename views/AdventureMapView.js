@@ -15,7 +15,7 @@ exports = Class(ScrollView, function (supr) {
 		this._totalWidth = opts.gridSettings.width * this._tileWidth;
 		this._totalHeight = opts.gridSettings.height * this._tileHeight;
 
-		var scale = opts.scale || 0.5;
+		var scale = opts.scale || 1;
 
 		opts = merge(
 			opts,
@@ -38,7 +38,14 @@ exports = Class(ScrollView, function (supr) {
 		this._adventureMapLayers = [];
 		this._inputLayerIndex = opts.inputLayerIndex;
 
-		this._content = new GestureView({
+		this._showTimeout = null;
+
+		this._fingerOne = null;
+		this._fingerTwo = null;
+
+		this._touchIDs = [];
+
+		this._content = new View({
 			superview: this,
 			x: 0,
 			y: 0,
@@ -79,6 +86,70 @@ exports = Class(ScrollView, function (supr) {
 			var adventureMapLayer = this._adventureMapLayers[i];
 			adventureMapLayer && adventureMapLayer.onUpdate && adventureMapLayer.onUpdate(data);
 		}
+
+		this._showTimeout = this._showTimeout || setTimeout(
+			bind(this, function () {
+				for (var i = 0; i < 4; i++) {
+					this._adventureMapLayers[i].style.visible = true;
+				}
+			}),
+			0
+		);
+	};
+
+	this.onPinch = function (pinchScale) {
+		this.setScale(pinchScale);
+	};
+
+	this.onInputStart = function (evt, pt) {
+		supr(this, 'onInputStart', arguments);
+		switch (this._touchIDs.length) {
+			case 1:
+				this._fingerOne = this._touchIDs[0];
+				this._pinchPoints[this._fingerOne] = {x: evt.srcPoint.x, y: evt.srcPoint.y};
+				break;
+			case 2:
+				this._fingerTwo = this._touchIDs[1];
+				this._pinchPoints[this._fingerTwo] = {x: evt.srcPoint.x, y: evt.srcPoint.y};
+				break;
+		}
+		if (this._touchIDs.length === 2) {
+			this._pinchScale = this.getScale();
+			this._pinchStartDistance = this.getPinchDistance();
+			this._pinch = true;
+		} else {
+			this._pinch = false;
+		}
+	};
+
+	this.onDrag = function (dragEvt, moveEvt, delta) {
+		this.emit('Dragged');
+		if (this._pinch) {
+			this._pinchPoints['_' + moveEvt.id] = {x: moveEvt.srcPoint.x, y: moveEvt.srcPoint.y};
+			this.setScale(this.getPinchDistance() / this._pinchStartDistance * this._pinchScale);
+		} else {
+			supr(this, 'onDrag', arguments);
+		}
+	};
+
+	this.onDragStop = function (dragEvt, selectEvt) {
+		if (this._pinch) {
+			if ('id' in dragEvt) {
+				delete this._touch['_' + dragEvt.id];
+				this._touchIDs = Object.keys(this._touch);
+			}
+			if ('id' in selectEvt) {
+				delete this._touch['_' + selectEvt.id];
+				this._touchIDs = Object.keys(this._touch);
+			}
+
+		} else {
+			supr(this, 'onDragStop', arguments);
+		}
+	};
+
+	this.setOffset = function (x, y) {
+		(this._touchIDs.length <= 1) && supr(this, 'setOffset', arguments);
 	};
 
 	this.getAdventureMapLayers = function () {

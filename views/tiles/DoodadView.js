@@ -33,28 +33,29 @@ exports = Class(View, function (supr) {
 		var tile = grid[tileY][tileX];
 		if (tile && tile.doodad) {
 			var doodad = this._doodads[tile.doodad - 1];
+			if (doodad) {
+				if (this._doodadView) {
+					this._doodadView.style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
+					this._doodadView.style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
+					this._doodadView.style.width = doodad.width;
+					this._doodadView.style.height = doodad.height;
+				} else {
+					this._doodadView = new SpriteView({
+						superview: this,
+						x: tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5,
+						y: tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5,
+						width: doodad.width,
+						height: doodad.height,
+						url: doodad.url,
+						image: doodad.image,
+						frameRate: doodad.frameRate,
+						blockEvents: true
+					});
+				}
 
-			if (this._doodadView) {
-				this._doodadView.style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
-				this._doodadView.style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
-				this._doodadView.style.width = doodad.width;
-				this._doodadView.style.height = doodad.height;
-			} else {
-				this._doodadView = new SpriteView({
-					superview: this,
-					x: tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5,
-					y: tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5,
-					width: doodad.width,
-					height: doodad.height,
-					url: doodad.url,
-					image: doodad.image,
-					frameRate: doodad.frameRate,
-					blockEvents: true
-				});
+				doodad.animation && this._doodadView.startAnimation(doodad.animation, {randomFrame: true});
+				this._doodadView.style.visible = true;
 			}
-
-			doodad.animation && this._doodadView.startAnimation(doodad.animation, {randomFrame: true});
-			this._doodadView.style.visible = true;
 		} else if (this._doodadView) {
 			this._doodadView.style.visible = false;
 		}

@@ -98,14 +98,18 @@ exports = Class(ImageView, function (supr) {
 
 		if (tile && tile.doodad) {
 			var doodad = this._doodads[tile.doodad - 1];
-			var style = this._doodadView.style;
+			if (doodad) {
+				var style = this._doodadView.style;
 
-			this._doodadView.setImage(doodad.image);
-			style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
-			style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
-			style.width = doodad.width;
-			style.height = doodad.height;
-			style.visible = true;
+				this._doodadView.setImage(doodad.image);
+				style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
+				style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
+				style.width = doodad.width;
+				style.height = doodad.height;
+				style.visible = true;
+			} else {
+				this._doodadView.style.visible = false;
+			}
 		} else {
 			this._doodadView.style.visible = false;
 		}
