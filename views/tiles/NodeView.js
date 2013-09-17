@@ -65,26 +65,25 @@ exports = Class(ImageView, function (supr) {
 			this._itemView.setImage(node.image);
 
 			if (tile.id && node.characterSettings) {
-				if (this._idText) {
-					this._idText.style.width = node.width;
-					this._idText.style.height = node.characterSettings.height || node.height;
-					this._idText.setText(tile.id);
-					if (node.characterSettings !== this._characterSettings) {
-						this._idText.setCharacterData(node.characterSettings.data);
-						this._characterSettings = node.characterSettings.data;
-					}
-				} else {
+				if (!this._idText) {
 					this._idText = new ScoreView({
 						superview: this._itemView,
 						x: 0,
-						y: (node.height - node.characterSettings.height) * 0.5,
-						width: node.width,
-						height: node.characterSettings.height || node.height,
+						y: 0,
+						width: 0,
+						height: 0,
 						text: tile.id,
 						blockEvents: true,
 						characterData: node.characterSettings.data
 					});
-					this._characterSettings = node.characterSettings.data
+				}
+				this._idText.style.width = node.width;
+				this._idText.style.height = node.characterSettings.height || node.height;
+				this._idText.style.x = node.characterSettings.x || 0;
+				this._idText.style.y = node.characterSettings.y || 0;
+				if (node.characterSettings !== this._characterSettings) {
+					this._idText.setCharacterData(node.characterSettings.data);
+					this._characterSettings = node.characterSettings.data;
 				}
 			}
 
@@ -98,14 +97,18 @@ exports = Class(ImageView, function (supr) {
 
 		if (tile && tile.doodad) {
 			var doodad = this._doodads[tile.doodad - 1];
-			var style = this._doodadView.style;
+			if (doodad) {
+				var style = this._doodadView.style;
 
-			this._doodadView.setImage(doodad.image);
-			style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
-			style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
-			style.width = doodad.width;
-			style.height = doodad.height;
-			style.visible = true;
+				this._doodadView.setImage(doodad.image);
+				style.x = tile.doodadX * this._tileSettings.tileWidth - doodad.width * 0.5;
+				style.y = tile.doodadY * this._tileSettings.tileHeight - doodad.height * 0.5;
+				style.width = doodad.width;
+				style.height = doodad.height;
+				style.visible = true;
+			} else {
+				this._doodadView.style.visible = false;
+			}
 		} else {
 			this._doodadView.style.visible = false;
 		}
