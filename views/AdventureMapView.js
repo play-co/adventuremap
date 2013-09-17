@@ -14,7 +14,7 @@ exports = Class(ScrollView, function (supr) {
 		this._totalWidth = opts.gridSettings.width * this._tileWidth;
 		this._totalHeight = opts.gridSettings.height * this._tileHeight;
 
-		var scale = opts.scale || 0.5;
+		var scale = opts.scale || 1;
 
 		opts = merge(
 			opts,
@@ -94,6 +94,7 @@ exports = Class(ScrollView, function (supr) {
 				adventureMapLayer.onUpdate(data);
 			}
 		}
+
 		this._showTimeout = this._showTimeout || setTimeout(
 			bind(this, function () {
 				for (var i = 0; i < 4; i++) {
@@ -130,6 +131,8 @@ exports = Class(ScrollView, function (supr) {
 	};
 
 	this.onDrag = function (dragEvt, moveEvt, delta) {
+		this.emit('Dragged');
+
 		if (this._pinch) {
 			this._pinchPoints['_' + moveEvt.id] = {x: moveEvt.srcPoint.x, y: moveEvt.srcPoint.y};
 			this.setScale(this.getPinchDistance() / this._pinchStartDistance * this._pinchScale);

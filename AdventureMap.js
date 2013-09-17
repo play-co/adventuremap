@@ -25,10 +25,11 @@ exports = Class(Emitter, function (supr) {
 		this._nodeSettings = opts.nodeSettings;
 
 		if (tileSettings.tiles === 'CREATE_GRID') {
+			var path = tileSettings.path || 'resources/images/tiles/';
 			tileSettings.tiles = [];
 			for (var y = 0; y < gridSettings.height; y++) {
 				for (var x = 0; x < gridSettings.width; x++) {
-					tileSettings.tiles.push('resources/images/tiles/' + String.fromCharCode(97 + y) + x + '.png');
+					tileSettings.tiles.push(path + String.fromCharCode(97 + y) + x + '.png');
 				}
 			}
 		}
@@ -42,6 +43,7 @@ exports = Class(Emitter, function (supr) {
 		this._pinchScale = null;
 		this._dragSingleCount = 0;
 
+		this._adventureMapView.on('Dragged', bind(this, 'emit', 'Dragged'));
 		this._adventureMapView.on('Size', bind(this._model, 'onSize'));
 		this._adventureMapView.on('ClickTag', bind(this, 'onClickTag'));
 		this._adventureMapView.on('ClickNode', bind(this, 'onClickNode'));

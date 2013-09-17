@@ -39,6 +39,8 @@ Every tile must have a backround but the doodad is optional.  This data structur
 
 #### Tile settings: Object schema
 
+ + `path {string}="resources/images/tiles/"` ---The path to the image resources for this map.
+ + `centerTag {boolean}=true` ---Whether a tag should be positioned in the center of the node.
  + `tiles {array}` ---A list of filename strings.
  + `defaultTile {number}` ---The default tile with which the map is filled when cleared from the editor, refers to an index in the `tiles` array.
  + `tileWidth {number}` ---The width of the tiles.

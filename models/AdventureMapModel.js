@@ -345,7 +345,7 @@ exports = Class(Emitter, function (supr) {
 					}
 				}
 
-				if ('id' in tile) {
+				if (('id' in tile) && ('x' in tile)) {
 					var nodeId = parseInt(tile.id, 10);
 					if (!isNaN(nodeId)) {
 						this._minNodeId = Math.min(this._minNodeId, nodeId);
