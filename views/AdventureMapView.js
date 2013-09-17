@@ -46,8 +46,6 @@ exports = Class(ScrollView, function (supr) {
 		this._fingerOne = null;
 		this._fingerTwo = null;
 
-		this._touchIDs = [];
-
 		this._content = new View({
 			superview: this,
 			x: 0,
