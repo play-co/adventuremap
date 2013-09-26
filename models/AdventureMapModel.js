@@ -14,7 +14,8 @@ var DEFAULT_TILE_VALUES = {
 		tags: 'anything',
 		text: '',
 		title: '',
-		id: ''
+		id: '',
+		map: 'anything'
 	};
 
 exports = Class(Emitter, function (supr) {
@@ -68,11 +69,17 @@ exports = Class(Emitter, function (supr) {
 	};
 
 	this.createEmptyMap = function (width, height, value) {
+		//debugger;
 		var result = [];
 		for (var y = 0; y < height; y++) {
 			result[y] = [];
 			for (var x = 0; x < width; x++) {
-				result[y][x] = (height - y - 1) * width + x;
+				var defaultTile = {};
+				if(value){
+					defaultTile = value;
+				}
+				defaultTile.map = (height - y - 1) * width + x;
+				result[y][x] = defaultTile;
 			}
 		}
 		return result;
@@ -216,6 +223,8 @@ exports = Class(Emitter, function (supr) {
 
 	this.toJSON = function () {
 		var map = this._map;
+		console.log("map:", map);
+		debugger;
 		var data = this._data;
 		var grid = data.grid;
 		var result = {
@@ -248,7 +257,7 @@ exports = Class(Emitter, function (supr) {
 				// If there's anything interesting then save the object...
 				if (Object.keys(saveTile).length) {
 					same = false; // If it's an object then save all values in this row...
-					saveTile.map = mapValue;
+					//saveTile.map = mapValue;
 					result.grid[y][x] = saveTile;
 				} else { // If there's nothing interesting then save the background...
 					result.grid[y][x] = mapValue;
@@ -259,7 +268,6 @@ exports = Class(Emitter, function (supr) {
 					}
 				}
 			}
-
 			// If all the items are numeric and the same then store a single value...
 			if (same) {
 				result.grid[y] = [lastValue];
@@ -291,9 +299,17 @@ exports = Class(Emitter, function (supr) {
 				tile.text = '';
 				tile.tags = {};
 
+				//debugger;
+				tile.doodad = 0;
+				tile.doodadX = undefined;
+				tile.doodadY = undefined;
+				tile.id = undefined;
+				tile.map = (data.height - y - 1) * data.width + x;
+
 				mapLine[x] = this._defaultTile;
 			}
 		}
+		console.log("map:", map);
 	};
 
 	this.load = function (data) {
@@ -330,7 +346,7 @@ exports = Class(Emitter, function (supr) {
 						tile[i] = DEFAULT_TILE_VALUES[i];
 					}
 				}
-				delete tile.map;
+				//delete tile.map;
 
 				tile.tileX = x;
 				tile.tileY = y;

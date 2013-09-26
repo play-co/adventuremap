@@ -26,9 +26,9 @@ exports = Class(Emitter, function (supr) {
 
 		if (tileSettings.tiles === 'CREATE_GRID') {
 			tileSettings.tiles = [];
-			for (var y = 0; y < gridSettings.height; y++) {
+			for (var y = gridSettings.height - 1; y >= 0; y--) {
 				for (var x = 0; x < gridSettings.width; x++) {
-					tileSettings.tiles.push('resources/images/tiles/' + String.fromCharCode(97 + y) + x + '.png');
+					tileSettings.tiles.push('resources/images/tiles/' + x + '-' + String.fromCharCode(65 + y) + '.png');
 				}
 			}
 		}
