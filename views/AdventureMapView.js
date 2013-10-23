@@ -14,6 +14,9 @@ exports = Class(ScrollView, function (supr) {
 		this._totalWidth = opts.gridSettings.width * this._tileWidth;
 		this._totalHeight = opts.gridSettings.height * this._tileHeight;
 
+		this._touch = {};
+		this._touchIDs = [];
+
 		var scale = opts.scale || 1;
 
 		opts = merge(
@@ -110,7 +113,19 @@ exports = Class(ScrollView, function (supr) {
 	};
 
 	this.onInputStart = function (evt, pt) {
-		supr(this, 'onInputStart', arguments);
+		if (!this._touchIDs.length) {
+			if (this._opts.drag) {
+				this.startDrag({radius: this._opts.dragRadius * this._snapPixels});
+
+				if (this._anim && this._anim.hasFrames()) {
+					this._anim.clear();
+				}
+
+				evt.cancel();
+			}
+		}
+		this._touch['_' + evt.id] = true;
+		this._touchIDs = Object.keys(this._touch);
 		switch (this._touchIDs.length) {
 			case 1:
 				this._fingerOne = this._touchIDs[0];
@@ -127,6 +142,13 @@ exports = Class(ScrollView, function (supr) {
 			this._pinch = true;
 		} else {
 			this._pinch = false;
+		}
+	};
+
+	this.onInputSelect = this.onInputOut = function (evt) {
+		if ('id' in evt) {
+			delete this._touch['_' + evt.id];
+			this._touchIDs = Object.keys(this._touch);
 		}
 	};
 
@@ -151,8 +173,18 @@ exports = Class(ScrollView, function (supr) {
 				delete this._touch['_' + selectEvt.id];
 				this._touchIDs = Object.keys(this._touch);
 			}
-
+			if (this._touchIDs.length < 2) {
+				this._pinch = false;
+			}
 		} else {
+			if ('id' in dragEvt) {
+				delete this._touch['_' + dragEvt.id];
+				this._touchIDs = Object.keys(this._touch);
+			}
+			if ('id' in selectEvt) {
+				delete this._touch['_' + selectEvt.id];
+				this._touchIDs = Object.keys(this._touch);
+			}
 			supr(this, 'onDragStop', arguments);
 		}
 	};
